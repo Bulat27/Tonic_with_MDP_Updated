@@ -327,9 +327,9 @@ bool Tonic::sample_edge(const int src, const int dst) {
                     (current_heaviness == lightest_heaviness && next_double() < 0.5)) {
                     // -- replace the lightest heavy edge with current edge
                     heavy_edges_.pop();
-                    heavy_edges_.push({{u, v}, current_heaviness});
-                    subgraph_[lightest_heavy_edge.first.first][lightest_heavy_edge.first.second] = false;
-                    subgraph_[lightest_heavy_edge.first.second][lightest_heavy_edge.first.first] = false;
+                    heavy_edges_.push({{uv_sample.first, uv_sample.second}, current_heaviness});
+                    // subgraph_[lightest_heavy_edge.first.first][lightest_heavy_edge.first.second] = false;
+                    // subgraph_[lightest_heavy_edge.first.second][lightest_heavy_edge.first.first] = false;
                     uv_sample = lightest_heavy_edge.first;
                 }
             }
@@ -362,9 +362,11 @@ bool Tonic::sample_edge(const int src, const int dst) {
  * @param dst
  */
 void Tonic::process_edge(const int u, const int v) {
+
     count_triangles(u, v);
     bool is_det = sample_edge(u, v);
     add_edge(u, v, is_det);
     t_++;
+
     assert(heavy_edges_.size() <= H_size_);
 }

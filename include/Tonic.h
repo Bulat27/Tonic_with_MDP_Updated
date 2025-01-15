@@ -81,7 +81,7 @@ public:
     double beta_;
     bool edge_oracle_flag_ = false;
 
-    constexpr static unsigned long long MAX_ID_NODE = 75000000;
+    constexpr static unsigned long long MAX_ID_NODE = 100000000;
 
     inline static unsigned long long edge_to_id(const int u, const int v) {
         int nu = (u < v ? u : v);

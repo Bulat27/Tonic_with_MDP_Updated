@@ -1,6 +1,6 @@
 # Fast and Accurate Triangle Counting in Graph Streams Using Predictions (ICDM 2024)
 
-Cristian Boldrin and Fabio Vandin, "Fast and Accurate Triangle Counting in Graph Streams Using Predictions", to appear at ICDM 2024.
+Cristian Boldrin and Fabio Vandin, "Fast and Accurate Triangle Counting in Graph Streams Using Predictions", appeared at ICDM 2024.
 
 <a href="https://arxiv.org/pdf/2409.15205">Link</a> for Arxiv Extended Version of the paper
 

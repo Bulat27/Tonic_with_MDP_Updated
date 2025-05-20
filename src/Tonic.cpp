@@ -3,6 +3,7 @@
 //
 
 #include "Tonic.h"
+#include <fstream>
 
 /**
  * Constructor for Tonic - insertion only algorithm
@@ -12,7 +13,7 @@
  * @param beta
  */
 Tonic::Tonic(int random_seed, long k, double alpha, double beta) : t_(0), k_(k), alpha_(alpha),
-                                                                   beta_(beta)  {
+                                                                   beta_(beta), random_seed_(random_seed)  {
 
     printf("Starting Tonic Algo - alpha %.3f, beta = %.3f | Memory Budget = %ld\n", alpha, beta, k);
     WR_size_ = (long) (k_ * alpha);
@@ -182,6 +183,10 @@ double Tonic::get_local_triangles(const int u) const {
     }
 }
 
+void Tonic::setup_space_saving() {
+    ss_heap_ = UnbiasedSpaceSaving(size_oracle, random_seed_ + 123);  // or reuse random_seed
+}
+
 /**
  * Function that counts the triangles closed by the current edge (src, dst). The function is called before the edge is
  * sampled.
@@ -189,6 +194,9 @@ double Tonic::get_local_triangles(const int u) const {
  * @param dst
  */
 void Tonic::count_triangles(const int src, const int dst) {
+    ss_heap_.update(src);
+    ss_heap_.update(dst);
+
     emhash5::HashMap<int, bool> *u_neighs, *v_neighs;
     auto u_it = subgraph_.find(src);
     if (u_it == subgraph_.end()) {
@@ -353,6 +361,17 @@ bool Tonic::sample_edge(const int src, const int dst) {
         return true;
 
     }
+}
+
+void Tonic::write_top_nodes(const std::string& output_path) const {
+    std::ofstream out_file(output_path + "_top_nodes.csv");
+    out_file << "Node,Degree\n";
+
+    for (const auto& [node, freq] : ss_heap_.top_k()) {
+        out_file << node << "," << freq << "\n";
+    }
+
+    out_file.close();
 }
 
 /**

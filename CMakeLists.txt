@@ -15,6 +15,7 @@ add_executable(Tonic
         src/Utils.cpp
         src/Tonic.cpp
         src/Tonic_FD.cpp
+        src/Unbiased_Space_Saving.cpp
 )
 
 
@@ -22,25 +23,29 @@ add_executable(BuildOracle
         src/main.cpp
         src/Utils.cpp
 		src/Tonic.cpp
-		src/Tonic_FD.cpp)
+		src/Tonic_FD.cpp
+                src/Unbiased_Space_Saving.cpp)
 
 add_executable(DataPreprocessing
         src/main.cpp
         src/Utils.cpp
 		src/Tonic.cpp
-		src/Tonic_FD.cpp)
+		src/Tonic_FD.cpp
+                src/Unbiased_Space_Saving.cpp)
 
 add_executable(RunExactAlgo
         src/main.cpp
 		src/Tonic.cpp
 		src/Tonic_FD.cpp
-		src/Utils.cpp)
+		src/Utils.cpp
+                src/Unbiased_Space_Saving.cpp)
 
 add_executable(CreateFDStream
         src/main.cpp
         src/Utils.cpp
 	src/Tonic.cpp
-	src/Tonic_FD.cpp)
+	src/Tonic_FD.cpp
+        src/Unbiased_Space_Saving.cpp)
 
 target_include_directories(Tonic PRIVATE include)
 target_include_directories(BuildOracle PRIVATE include)

@@ -326,6 +326,9 @@ int main(int argc, char **argv) {
 
         } else {
             Tonic tonic_algo(random_seed, memory_budget, alpha, beta);
+            tonic_algo.size_oracle = 3 * size_oracle;        // Your preferred way
+            tonic_algo.setup_space_saving();                 // NEW: now initialize the heap
+
             if (edge_oracle_flag)
                 tonic_algo.set_edge_oracle(edge_oracle);
             else
@@ -339,6 +342,7 @@ int main(int argc, char **argv) {
             write_results(std::string("TonicINS"), tonic_algo.get_global_triangles(), time,
                           output_path, edge_oracle_flag, alpha, beta, memory_budget, size_oracle, time_oracle);
 
+            tonic_algo.write_top_nodes(output_path);         // NEW: write tracked top nodes
         }
         std::cout << "Done!\n";
         return 0;

@@ -10,6 +10,7 @@
 #include <iostream>
 #include <string>
 #include <random>
+#include "Unbiased_Space_Saving.h"
 
 using Edge = std::pair<int, int>;
 using Heavy_edge = std::pair<Edge, int>;
@@ -59,6 +60,9 @@ private:
     double global_triangles_cnt_ = 0.0;
     emhash5::HashMap<int, double> local_triangles_cnt_;
 
+    // -- USS
+    UnbiasedSpaceSaving ss_heap_ = UnbiasedSpaceSaving(1, 42); // Dummy init, re-initialized later
+    
     int get_heaviness(const int u, const int v);
 
     void add_edge(const int u, const int v, bool det);
@@ -80,6 +84,8 @@ public:
     double alpha_;
     double beta_;
     bool edge_oracle_flag_ = false;
+    int size_oracle = 0;
+    int random_seed_;  // Stored seed for reproducibility
 
     constexpr static unsigned long long MAX_ID_NODE = 100000000;
 
@@ -114,7 +120,10 @@ public:
 
     inline unsigned long long get_edges_processed() const;
 
+    // -- USS
+    void setup_space_saving();  // Called after setting size_oracle
 
+    void write_top_nodes(const std::string& output_path) const;  // CSV export
 };
 
 

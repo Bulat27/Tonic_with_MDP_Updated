@@ -9,17 +9,19 @@
 
 class UnbiasedSpaceSaving {
 public:
+
+      struct HeapNode {
+        int node;
+        int freq;
+    };
+
     UnbiasedSpaceSaving(int k, int seed);
 
     void update(int node);
 
-    std::vector<std::pair<int, int>> top_k() const;
+    const std::vector<HeapNode>& top_n(int n);
 
 private:
-    struct HeapNode {
-        int node;
-        int freq;
-    };
 
     int capacity_;
     std::vector<HeapNode> heap_;

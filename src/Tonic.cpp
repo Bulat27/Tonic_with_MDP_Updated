@@ -184,7 +184,7 @@ double Tonic::get_local_triangles(const int u) const {
 }
 
 void Tonic::setup_space_saving() {
-    ss_heap_ = UnbiasedSpaceSaving(size_oracle, random_seed_ + 123);  // or reuse random_seed
+    ss_heap_ = UnbiasedSpaceSaving(update_map_capacity, random_seed_ + 123);  // or reuse random_seed
 }
 
 /**
@@ -363,15 +363,20 @@ bool Tonic::sample_edge(const int src, const int dst) {
     }
 }
 
-void Tonic::write_top_nodes(const std::string& output_path) const {
+// This should go into Utils.cpp probably!!!
+void Tonic::write_top_nodes(const std::string& output_path, const std::vector<UnbiasedSpaceSaving::HeapNode>& top_nodes) const {
     std::ofstream out_file(output_path + "_top_nodes.csv");
     out_file << "Node,Degree\n";
 
-    for (const auto& [node, freq] : ss_heap_.top_k()) {
-        out_file << node << "," << freq << "\n";
+    for (const auto& entry : top_nodes) {
+        out_file << entry.node << "," << entry.freq << "\n";
     }
 
     out_file.close();
+}
+
+const std::vector<UnbiasedSpaceSaving::HeapNode>& Tonic::get_top_nodes(int n) {
+    return ss_heap_.top_n(n);
 }
 
 /**

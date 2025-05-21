@@ -1,6 +1,8 @@
 #include "Unbiased_Space_Saving.h"
 #include <algorithm>
 
+#include <iostream>
+
 UnbiasedSpaceSaving::UnbiasedSpaceSaving(int k, int seed)
     : capacity_(k), gen_(seed), dist_(0.0, 1.0) {
     heap_.resize(k, {-1, 0});  // Dummy node: -1 means unused
@@ -33,13 +35,18 @@ void UnbiasedSpaceSaving::update(int node) {
     }
 }
 
-std::vector<std::pair<int, int>> UnbiasedSpaceSaving::top_k() const {
-    std::vector<std::pair<int, int>> res;
-    for (const auto& h : heap_) {
-        if (h.node != -1)
-            res.emplace_back(h.node, h.freq);
-    }
-    return res;
+const std::vector<UnbiasedSpaceSaving::HeapNode>& UnbiasedSpaceSaving::top_n(int n) {
+    if (n > static_cast<int>(heap_.size()))
+        n = heap_.size();
+
+    std::partial_sort(
+        heap_.begin(), heap_.begin() + n, heap_.end(),
+        [](const HeapNode& a, const HeapNode& b) {
+            return a.freq > b.freq;
+        });
+
+    heap_.resize(n);  // keep only top-n
+    return heap_;
 }
 
 int UnbiasedSpaceSaving::left(int i) const {

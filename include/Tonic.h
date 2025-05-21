@@ -84,7 +84,7 @@ public:
     double alpha_;
     double beta_;
     bool edge_oracle_flag_ = false;
-    int size_oracle = 0;
+    int update_map_capacity = 0;
     int random_seed_;  // Stored seed for reproducibility
 
     constexpr static unsigned long long MAX_ID_NODE = 100000000;
@@ -123,7 +123,9 @@ public:
     // -- USS
     void setup_space_saving();  // Called after setting size_oracle
 
-    void write_top_nodes(const std::string& output_path) const;  // CSV export
+    const std::vector<UnbiasedSpaceSaving::HeapNode>& get_top_nodes(int n);
+
+    void write_top_nodes(const std::string& output_path, const std::vector<UnbiasedSpaceSaving::HeapNode>& top_nodes) const;
 };
 
 

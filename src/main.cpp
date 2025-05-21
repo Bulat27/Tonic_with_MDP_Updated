@@ -258,10 +258,10 @@ int main(int argc, char **argv) {
 
     // -- Tonic Algo
     if (strcmp(project, "Tonic") == 0) {
-        if (argc != 10) {
+        if (argc != 12) {
             std::cerr << "Usage: Tonic <flag: 0: insertion-only stream, 1: fully-dynamic stream>"
                          " <random_seed> <memory_budget> <alpha> <beta> "
-                         "<dataset_path> <oracle_path> <oracle_type = [nodes, edges]> <output_path>\n";
+                         "<dataset_path> <oracle_path> <oracle_type = [nodes, edges]> <output_path> <update_map_capacity> <next_oracle_size>\n";
             return 1;
         }
 
@@ -282,6 +282,8 @@ int main(int argc, char **argv) {
         std::string oracle_path(argv[7]);
         std::string oracle_type(argv[8]);
         std::string output_path(argv[9]);
+        int update_map_capacity = atoi(argv[10]);
+        int next_oracle_size = atoi(argv[11]);
 
         std::chrono::time_point start = std::chrono::high_resolution_clock::now();
         double time, time_oracle;
@@ -326,8 +328,9 @@ int main(int argc, char **argv) {
 
         } else {
             Tonic tonic_algo(random_seed, memory_budget, alpha, beta);
-            tonic_algo.size_oracle = 3 * size_oracle;        // Your preferred way
-            tonic_algo.setup_space_saving();                 // NEW: now initialize the heap
+             // tonic_algo.update_map_capacity = 3 * size_oracle;
+            tonic_algo.update_map_capacity = update_map_capacity;
+            tonic_algo.setup_space_saving();
 
             if (edge_oracle_flag)
                 tonic_algo.set_edge_oracle(edge_oracle);
@@ -335,14 +338,17 @@ int main(int argc, char **argv) {
                 tonic_algo.set_node_oracle(node_oracle);
 
             start = std::chrono::high_resolution_clock::now();
+
             run_tonic_algo(dataset_path, tonic_algo);
+            const auto& top_nodes = tonic_algo.get_top_nodes(next_oracle_size);
+
             time = (double) ((std::chrono::duration_cast<std::chrono::milliseconds>(
                     std::chrono::high_resolution_clock::now() - start)).count()) / 1000;
 
             write_results(std::string("TonicINS"), tonic_algo.get_global_triangles(), time,
                           output_path, edge_oracle_flag, alpha, beta, memory_budget, size_oracle, time_oracle);
 
-            tonic_algo.write_top_nodes(output_path);         // NEW: write tracked top nodes
+            tonic_algo.write_top_nodes(output_path, top_nodes);         // NEW: write tracked top nodes
         }
         std::cout << "Done!\n";
         return 0;

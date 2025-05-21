@@ -11,6 +11,8 @@ def parse_args():
     parser.add_argument("-s", "--oracle_snapshot_folder", required=True, help="Folder with snapshot oracles (for determining oracle size)")
     parser.add_argument("-t", "--n_trials", type=int, required=True, help="Number of Trials for each parametrization")
     parser.add_argument("-n", "--name", required=True, help="Name (for output saving path)")
+    parser.add_argument("-c", "--multiplier", type=int, required=True, help="Multiplier for current_top_n_nodes to set update_map_capacity")
+
     return parser.parse_args()
 
 def count_lines_in_file(filepath):
@@ -32,15 +34,15 @@ def run_exact_algorithm(file_exact, dataset_path, output_exact):
     subprocess.run([file_exact, "0", dataset_path, output_exact], check=True)
     return get_total_edges(output_exact)
 
-def run_tonic(file_tonic, r, memory_budget, dataset_path, oracle_path, output_path_tonic):
+def run_tonic(file_tonic, r, memory_budget, dataset_path, oracle_path, output_path_tonic, update_map_capacity, next_oracle_size):
     """ Runs TONIC with the given parameters using 'nodes' as the oracle. """
     subprocess.run([
         file_tonic, "0", str(r), str(memory_budget), "0.05", "0.2",
-        dataset_path, oracle_path, "nodes", output_path_tonic
+        dataset_path, oracle_path, "nodes", output_path_tonic, str(update_map_capacity), str(next_oracle_size)
     ], check=True)
 
-def update_node_oracle(updated_oracle_path, node_degree_file, top_n_nodes):
-    """ Updates the node oracle hashmap based on new per-node degree counts. """
+def update_node_oracle(updated_oracle_path, node_degree_file):
+    """ Updates the node oracle hashmap using the top nodes file written by the C++ code. """
     node_degrees = {}
 
     if not os.path.exists(node_degree_file):
@@ -55,13 +57,9 @@ def update_node_oracle(updated_oracle_path, node_degree_file, top_n_nodes):
                 node, degree = int(row[0]), int(row[1])
                 node_degrees[node] = degree
 
-    # Sort nodes by degree and keep only the top `top_n_nodes`
-    sorted_nodes = sorted(node_degrees.items(), key=lambda x: x[1], reverse=True)
-    updated_oracle = dict(sorted_nodes[:top_n_nodes])
-
     # Write the updated oracle to a separate file
     with open(updated_oracle_path, "w") as f:
-        for node, degree in updated_oracle.items():
+        for node, degree in node_degrees.items():
             f.write(f"{node} {degree}\n")
 
 def main():
@@ -102,7 +100,9 @@ def main():
         dataset_full_path = os.path.join(args.dataset_folder, dataset_filename)
 
         # Get the oracle size for the update
-        current_top_n_nodes = oracle_sizes[index] if index < len(oracle_sizes) else None
+        # I have set 0 in the alternative case which should be fixed!
+        current_top_n_nodes = oracle_sizes[index] if index < len(oracle_sizes) else 0
+        update_map_capacity = args.multiplier * current_top_n_nodes
 
         print(f"Snapshot {dataset_filename}: Using oracle size {current_top_n_nodes if current_top_n_nodes else 'N/A'}")
 
@@ -115,11 +115,11 @@ def main():
 
         # Run TONIC using the updated oracle
         for r in range(RANDOM_SEED, END + 1):
-            run_tonic(FILE_TONIC, r, memory_budget, dataset_full_path, UPDATED_ORACLE_PATH, OUTPUT_PATH_TONIC)
+            run_tonic(FILE_TONIC, r, memory_budget, dataset_full_path, UPDATED_ORACLE_PATH, OUTPUT_PATH_TONIC, update_map_capacity, current_top_n_nodes)
 
         # Update the node oracle using the next snapshot’s size
         if index < len(snapshot_files) - 1:  # Skip last update
-            update_node_oracle(UPDATED_ORACLE_PATH, NODE_DEGREE_FILE, current_top_n_nodes)
+            update_node_oracle(UPDATED_ORACLE_PATH, NODE_DEGREE_FILE)
 
 if __name__ == "__main__":
     main()

@@ -1044,5 +1044,6 @@ dkms.conf
 # Raspberry Pi Pico disassembler file
 *.dis
 
-# My results
+# My results and safety files
 unbiased_space_saving_min_degree_update/output
+old_implementations/

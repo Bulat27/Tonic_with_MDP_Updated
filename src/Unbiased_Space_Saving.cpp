@@ -1,8 +1,6 @@
 #include "Unbiased_Space_Saving.h"
 #include <algorithm>
 
-#include <iostream>
-
 UnbiasedSpaceSaving::UnbiasedSpaceSaving(int k, int seed)
     : capacity_(k), gen_(seed), dist_(0.0, 1.0) {
     heap_.resize(k, {-1, 0});  // Dummy node: -1 means unused

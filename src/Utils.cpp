@@ -891,3 +891,13 @@ void Utils::build_node_oracle(std::string &filepath, double percentage_retain, s
     }
 }
 
+void Utils::write_top_nodes(const std::string& output_path, const std::vector<UnbiasedSpaceSaving::HeapNode>& top_nodes) {
+    std::ofstream out_file(output_path + "_top_nodes.csv");
+    out_file << "Node,Degree\n";
+
+    for (const auto& entry : top_nodes) {
+        out_file << entry.node << "," << entry.freq << "\n";
+    }
+
+    out_file.close();
+}

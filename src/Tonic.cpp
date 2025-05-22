@@ -194,8 +194,10 @@ void Tonic::setup_space_saving() {
  * @param dst
  */
 void Tonic::count_triangles(const int src, const int dst) {
-    ss_heap_.update(src);
-    ss_heap_.update(dst);
+    if (ss_heap_) {
+        ss_heap_->update(src);
+        ss_heap_->update(dst);
+    }
 
     emhash5::HashMap<int, bool> *u_neighs, *v_neighs;
     auto u_it = subgraph_.find(src);
@@ -363,20 +365,11 @@ bool Tonic::sample_edge(const int src, const int dst) {
     }
 }
 
-// This should go into Utils.cpp probably!!!
-void Tonic::write_top_nodes(const std::string& output_path, const std::vector<UnbiasedSpaceSaving::HeapNode>& top_nodes) const {
-    std::ofstream out_file(output_path + "_top_nodes.csv");
-    out_file << "Node,Degree\n";
-
-    for (const auto& entry : top_nodes) {
-        out_file << entry.node << "," << entry.freq << "\n";
-    }
-
-    out_file.close();
-}
-
 const std::vector<UnbiasedSpaceSaving::HeapNode>& Tonic::get_top_nodes(int n) {
-    return ss_heap_.top_n(n);
+    if (!ss_heap_) {
+        throw std::runtime_error("USS not initialized — cannot get top nodes.");
+    }
+    return ss_heap_->top_n(n);
 }
 
 /**

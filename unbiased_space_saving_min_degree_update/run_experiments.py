@@ -35,11 +35,17 @@ def run_exact_algorithm(file_exact, dataset_path, output_exact):
     return get_total_edges(output_exact)
 
 def run_tonic(file_tonic, r, memory_budget, dataset_path, oracle_path, output_path_tonic, update_map_capacity, next_oracle_size):
-    """ Runs TONIC with the given parameters using 'nodes' as the oracle. """
-    subprocess.run([
+    """ Runs TONIC with or without USS, depending on next oracle size. """
+    base_args = [
         file_tonic, "0", str(r), str(memory_budget), "0.05", "0.2",
-        dataset_path, oracle_path, "nodes", output_path_tonic, str(update_map_capacity), str(next_oracle_size)
-    ], check=True)
+        dataset_path, oracle_path, "nodes", output_path_tonic
+    ]
+
+    # Only enable USS if next_oracle_size > 0 (i.e., we know what to extract)
+    if next_oracle_size > 0:
+        base_args += ["1", str(update_map_capacity), str(next_oracle_size)]
+    subprocess.run(base_args, check=True)
+
 
 def update_node_oracle(updated_oracle_path, node_degree_file):
     """ Updates the node oracle hashmap using the top nodes file written by the C++ code. """
@@ -86,25 +92,34 @@ def main():
     if not os.path.exists(UPDATED_ORACLE_PATH):
         os.system(f"cp {args.oracle_min_degree_path} {UPDATED_ORACLE_PATH}")
 
-    # Load oracle sizes and shift left
+    # Load oracle files and snapshot files
     oracle_files = sorted(os.listdir(args.oracle_snapshot_folder))
+    snapshot_files = sorted(os.listdir(args.dataset_folder))
+
+    # Check if the number of files match
+    if len(oracle_files) != len(snapshot_files):
+        print(
+            f"Warning: Number of oracle files ({len(oracle_files)}) does not match number of snapshot files ({len(snapshot_files)}).\n"
+            "Each snapshot is expected to have a corresponding oracle file before shifting.\n"
+            "Please check that both folders contain aligned files."
+        )
+
     oracle_sizes = [count_lines_in_file(os.path.join(args.oracle_snapshot_folder, f)) for f in oracle_files]
 
     if oracle_sizes:
-        oracle_sizes.append(oracle_sizes.pop(0))  # Shift left and put first value at the end
-
-    # Process each dataset snapshot
-    snapshot_files = sorted(os.listdir(args.dataset_folder))  
+        oracle_sizes.pop(0)
 
     for index, dataset_filename in enumerate(snapshot_files):
         dataset_full_path = os.path.join(args.dataset_folder, dataset_filename)
 
         # Get the oracle size for the update
-        # I have set 0 in the alternative case which should be fixed!
         current_top_n_nodes = oracle_sizes[index] if index < len(oracle_sizes) else 0
         update_map_capacity = args.multiplier * current_top_n_nodes
 
-        print(f"Snapshot {dataset_filename}: Using oracle size {current_top_n_nodes if current_top_n_nodes else 'N/A'}")
+        if current_top_n_nodes == 0:
+            print(f"Warning: No next oracle size available for {dataset_filename}. USS will be disabled.")
+
+        print(f"Snapshot {dataset_filename}: Using update map capacity {current_top_n_nodes if current_top_n_nodes else 'N/A'}")
 
         # Run exact algorithm to get total number of edges
         total_edges = run_exact_algorithm(FILE_EXACT, dataset_full_path, OUTPUT_PATH_EXACT)
@@ -117,8 +132,8 @@ def main():
         for r in range(RANDOM_SEED, END + 1):
             run_tonic(FILE_TONIC, r, memory_budget, dataset_full_path, UPDATED_ORACLE_PATH, OUTPUT_PATH_TONIC, update_map_capacity, current_top_n_nodes)
 
-        # Update the node oracle using the next snapshot’s size
-        if index < len(snapshot_files) - 1:  # Skip last update
+        # Update the node oracle. Skip updates where the update map capacity is unknown (last snaphshot).
+        if current_top_n_nodes > 0:
             update_node_oracle(UPDATED_ORACLE_PATH, NODE_DEGREE_FILE)
 
 if __name__ == "__main__":

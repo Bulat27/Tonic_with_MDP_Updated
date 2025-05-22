@@ -11,6 +11,7 @@
 #include <string>
 #include <random>
 #include "Unbiased_Space_Saving.h"
+#include <optional>
 
 using Edge = std::pair<int, int>;
 using Heavy_edge = std::pair<Edge, int>;
@@ -61,7 +62,7 @@ private:
     emhash5::HashMap<int, double> local_triangles_cnt_;
 
     // -- USS
-    UnbiasedSpaceSaving ss_heap_ = UnbiasedSpaceSaving(1, 42); // Dummy init, re-initialized later
+    std::optional<UnbiasedSpaceSaving> ss_heap_;
     
     int get_heaviness(const int u, const int v);
 
@@ -124,8 +125,6 @@ public:
     void setup_space_saving();  // Called after setting size_oracle
 
     const std::vector<UnbiasedSpaceSaving::HeapNode>& get_top_nodes(int n);
-
-    void write_top_nodes(const std::string& output_path, const std::vector<UnbiasedSpaceSaving::HeapNode>& top_nodes) const;
 };
 
 

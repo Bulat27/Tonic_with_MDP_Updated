@@ -258,14 +258,16 @@ int main(int argc, char **argv) {
 
     // -- Tonic Algo
     if (strcmp(project, "Tonic") == 0) {
-        if (argc != 12) {
+        
+        if (argc != 10 and argc!= 13) {
             std::cerr << "Usage: Tonic <flag: 0: insertion-only stream, 1: fully-dynamic stream>"
-                         " <random_seed> <memory_budget> <alpha> <beta> "
-                         "<dataset_path> <oracle_path> <oracle_type = [nodes, edges]> <output_path> <update_map_capacity> <next_oracle_size>\n";
+                     " <random_seed> <memory_budget> <alpha> <beta> "
+                     "<dataset_path> <oracle_path> <oracle_type = [nodes, edges]> <output_path>"
+                     " <use_uss: 0|1> <update_map_capacity> <next_oracle_size>\n";
             return 1;
         }
 
-        // -- read arguments
+        // -- read core arguments
         int flag_fd = atoi(argv[1]);
         assert(flag_fd == 0 or flag_fd == 1);
         int random_seed = atoi(argv[2]);
@@ -282,8 +284,30 @@ int main(int argc, char **argv) {
         std::string oracle_path(argv[7]);
         std::string oracle_type(argv[8]);
         std::string output_path(argv[9]);
-        int update_map_capacity = atoi(argv[10]);
-        int next_oracle_size = atoi(argv[11]);
+        
+        // -- optional USS arguments
+        int uss_flag = 0;
+        int update_map_capacity = 0; 
+        int next_oracle_size = 0;
+
+        if(argc == 13){
+            uss_flag = atoi(argv[10]);
+            assert(uss_flag == 0 or uss_flag == 1);
+
+            update_map_capacity = atoi(argv[11]);
+            next_oracle_size = atoi(argv[12]);
+
+            if (uss_flag == 0) {
+                std::cerr << "Error! use_uss must be 1 if USS arguments are provided.\n";
+                return 1;
+            }
+        }
+
+        // -- validate USS applicability
+        if (uss_flag == 1 and (flag_fd == 1 or oracle_type == "edges")) {
+            std::cerr << "Error! USS is only supported for insertion-only streams with a node oracle.\n";
+            return 1;
+        }
 
         std::chrono::time_point start = std::chrono::high_resolution_clock::now();
         double time, time_oracle;
@@ -328,27 +352,39 @@ int main(int argc, char **argv) {
 
         } else {
             Tonic tonic_algo(random_seed, memory_budget, alpha, beta);
-             // tonic_algo.update_map_capacity = 3 * size_oracle;
-            tonic_algo.update_map_capacity = update_map_capacity;
-            tonic_algo.setup_space_saving();
+            
+            if(uss_flag == 1){
+                tonic_algo.update_map_capacity = update_map_capacity;
+                // Note: If we want to be really careful, this should be measured as well.
+                tonic_algo.setup_space_saving();
+            }
 
             if (edge_oracle_flag)
                 tonic_algo.set_edge_oracle(edge_oracle);
             else
                 tonic_algo.set_node_oracle(node_oracle);
 
+            const std::vector<UnbiasedSpaceSaving::HeapNode>* top_nodes = nullptr;
+
             start = std::chrono::high_resolution_clock::now();
 
             run_tonic_algo(dataset_path, tonic_algo);
-            const auto& top_nodes = tonic_algo.get_top_nodes(next_oracle_size);
+            
+            // put the sorting and slicing within the measured time
+            if(uss_flag == 1){
+                top_nodes = &tonic_algo.get_top_nodes(next_oracle_size);
+            }
 
             time = (double) ((std::chrono::duration_cast<std::chrono::milliseconds>(
                     std::chrono::high_resolution_clock::now() - start)).count()) / 1000;
 
             write_results(std::string("TonicINS"), tonic_algo.get_global_triangles(), time,
                           output_path, edge_oracle_flag, alpha, beta, memory_budget, size_oracle, time_oracle);
-
-            tonic_algo.write_top_nodes(output_path, top_nodes);         // NEW: write tracked top nodes
+            
+            // put the writing outside of measured time
+            if(uss_flag == 1){
+                Utils::write_top_nodes(output_path, *top_nodes);
+            }
         }
         std::cout << "Done!\n";
         return 0;

@@ -194,11 +194,7 @@ void Tonic::setup_space_saving() {
  * @param dst
  */
 void Tonic::count_triangles(const int src, const int dst) {
-    if (ss_heap_) {
-        ss_heap_->update(src);
-        ss_heap_->update(dst);
-    }
-
+   
     emhash5::HashMap<int, bool> *u_neighs, *v_neighs;
     auto u_it = subgraph_.find(src);
     if (u_it == subgraph_.end()) {
@@ -379,6 +375,11 @@ const std::vector<UnbiasedSpaceSaving::HeapNode>& Tonic::get_top_nodes(int n) {
  * @param dst
  */
 void Tonic::process_edge(const int u, const int v) {
+
+     if (ss_heap_) {
+        ss_heap_->update(u);
+        ss_heap_->update(v);
+    }
 
     count_triangles(u, v);
     bool is_det = sample_edge(u, v);

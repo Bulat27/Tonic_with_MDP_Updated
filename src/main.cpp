@@ -92,6 +92,39 @@ void run_tonic_algo_FD(std::string &dataset_path, Tonic_FD &algo) {
 
 }
 
+void run_uss_algo(std::string &dataset_path, UnbiasedSpaceSaving &uss) {
+
+    std::ifstream file(dataset_path);
+    std::string line;
+    long n_line = 0;
+    int u, v, t;
+
+    if (file.is_open()) {
+        while (true) {
+            if (!std::getline(file, line)) break;
+            std::istringstream iss(line);
+            std::string token;
+
+            std::getline(iss, token, ' ');
+            u = std::stoi(token);
+            std::getline(iss, token, ' ');
+            v = std::stoi(token);
+            std::getline(iss, token, ' ');
+            t = std::stoi(token);  // still read it for consistency
+
+            uss.update(u);
+            uss.update(v);
+
+            if (++n_line % 5000000 == 0) {
+                printf("Processed %ld edges.\n", n_line);
+            }
+        }
+        file.close();
+    } else {
+        std::cerr << "Error! Unable to open file " << dataset_path << "\n";
+    }
+}
+
 /**
  * Write results to a csv file
  * @param name of the algorithm
@@ -256,6 +289,28 @@ int main(int argc, char **argv) {
         }
     }
 
+    if (strcmp(project, "RunUSS") == 0) {
+        if (argc != 6) {
+            std::cerr << "Usage: RunUSS <dataset_path> <output_path_prefix> <k> <seed> <n_bar>\n";
+            return 1;
+        }
+
+        std::string dataset_path(argv[1]);
+        std::string output_path(argv[2]);
+        int k = std::stoi(argv[3]);
+        int seed = std::stoi(argv[4]);
+        int n_bar = std::stoi(argv[5]);
+
+        UnbiasedSpaceSaving uss(k, seed);
+        run_uss_algo(dataset_path, uss);
+
+        const auto& top_nodes = uss.top_n(n_bar);
+        Utils::write_top_nodes(output_path, top_nodes);
+
+        std::cout << "USS run completed. Output written to " << output_path << "_top_nodes.csv\n";
+        return 0;
+    }
+
     // -- Tonic Algo
     if (strcmp(project, "Tonic") == 0) {
         
@@ -266,7 +321,7 @@ int main(int argc, char **argv) {
                      " <use_uss: 0|1> <update_map_capacity> <next_oracle_size>\n";
             return 1;
         }
-
+        
         // -- read core arguments
         int flag_fd = atoi(argv[1]);
         assert(flag_fd == 0 or flag_fd == 1);

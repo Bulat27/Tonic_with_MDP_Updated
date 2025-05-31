@@ -47,6 +47,14 @@ add_executable(CreateFDStream
 	src/Tonic_FD.cpp
         src/Unbiased_Space_Saving.cpp)
 
+add_executable(RunUSS
+        src/main.cpp
+        src/Utils.cpp
+        src/Tonic.cpp
+        src/Tonic_FD.cpp
+        src/Unbiased_Space_Saving.cpp)
+
+target_include_directories(RunUSS PRIVATE include)
 target_include_directories(Tonic PRIVATE include)
 target_include_directories(BuildOracle PRIVATE include)
 target_include_directories(DataPreprocessing PRIVATE include)

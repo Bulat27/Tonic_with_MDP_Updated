@@ -10,7 +10,7 @@ def parse_args():
     parser = argparse.ArgumentParser(description="Run TONIC on graph snapshots combined with USS to update the MinDegreePredictor")
     parser.add_argument("-d", "--dataset_folder", required=True, help="Dataset folder containing graph snapshots")
     parser.add_argument("-o", "--oracle_min_degree_path", required=True, help="MinDegreePredictor path (from the first snapshot)")
-    parser.add_argument("-s", "--oracle_sizes_file", required=True, help="Path to .txt file containing one oracle size per row")
+    parser.add_argument('-b', '--nbar_file', required=True, help='Path to .txt file containing one oracle size per row')
     parser.add_argument("-c", "--multiplier", type=int, required=True, help="Multiplier for oracle sizes to set the USS capacity")
     parser.add_argument("-t", "--n_trials", type=int, required=True, help="Number of trials per snapshot")
     parser.add_argument("-n", "--name", required=True, help="Output name")
@@ -83,7 +83,7 @@ def main():
     dataset_files = sorted(os.listdir(args.dataset_folder))
 
     # Load oracle sizes from file
-    with open(args.oracle_sizes_file, "r") as f:
+    with open(args.nbar_file, "r") as f:
         oracle_sizes = [int(line.strip()) for line in f if line.strip().isdigit()]
 
     # Check if the number of files match

@@ -6,6 +6,7 @@
 #include <fstream>
 #include <string>
 #include <chrono>
+#include <filesystem>
 
 /**
  * Read stream and perform the Tonic algorithm for insertion only streams
@@ -142,12 +143,25 @@ void write_results(std::string name, double estimated_T, double time, std::strin
                     double alpha, double beta, long memory_budget, int size_oracle,
                     double time_oracle) {
     printf("%s Algo successfully run in time %.3f! Estimated count T = %f\n", name.c_str(), time, estimated_T);
-    // -- write results
-    // -- global estimates
-    std::ofstream out_file(output_path + "_global_count.csv", std::ios::app);
+
+    std::string csv_path = output_path + "_global_count.csv";
+
+    // Check if the file exists and is empty (write header only once)
+    bool write_header = !std::filesystem::exists(csv_path) || std::filesystem::file_size(csv_path) == 0;
+
+    std::ofstream out_file(csv_path, std::ios::app);
+    
+    if (!out_file.is_open()) {
+        std::cerr << "Error! Could not open file " << csv_path << " for writing.\n";
+        return;
+    }
+
     std::string oracle_type_str = edge_oracle_flag ? "Edges" : "Nodes";
 
-    out_file << "Algo,Params,Oracle,SizeOracle,TimeOracle,MemEdges,GlobalTriangleCount,Time\n";
+    if (write_header) {
+        out_file << "Algo,Params,Oracle,SizeOracle,TimeOracle,MemEdges,GlobalTriangleCount,Time\n";
+    }
+
     out_file << name.c_str() << ",Alpha=" << alpha << "-Beta=" << beta << "," << oracle_type_str << "," << size_oracle
              << "," << time_oracle << "," << memory_budget << "," << std::fixed << estimated_T << "," << time << "\n";
 
@@ -410,7 +424,6 @@ int main(int argc, char **argv) {
             
             if(uss_flag == 1){
                 tonic_algo.update_map_capacity = update_map_capacity;
-                // Note: If we want to be really careful, this should be measured as well.
                 tonic_algo.setup_space_saving();
             }
 
@@ -439,6 +452,7 @@ int main(int argc, char **argv) {
             // put the writing outside of measured time
             if(uss_flag == 1){
                 Utils::write_top_nodes(output_path, *top_nodes);
+                Utils::write_map_capacity(output_path, update_map_capacity, next_oracle_size);
             }
         }
         std::cout << "Done!\n";

@@ -184,7 +184,7 @@ double Tonic::get_local_triangles(const int u) const {
 }
 
 void Tonic::setup_space_saving() {
-    ss_heap_ = UnbiasedSpaceSaving(update_map_capacity, random_seed_ + 123);  // or reuse random_seed
+    ss_heap_ = UnbiasedSpaceSaving(update_map_capacity, random_seed_);
 }
 
 /**

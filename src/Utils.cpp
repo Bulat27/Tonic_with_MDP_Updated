@@ -3,6 +3,8 @@
 //
 
 #include "../include/Utils.h"
+#include <fstream>
+#include <filesystem>
 
 /**
  * Runs the exact algorithm for counting triangles in a insertion-only, undirected and static graph streams
@@ -899,5 +901,23 @@ void Utils::write_top_nodes(const std::string& output_path, const std::vector<Un
         out_file << entry.node << "," << entry.freq << "\n";
     }
 
+    out_file.close();
+}
+
+void Utils::write_map_capacity(const std::string& output_path, int map_capacity, int next_oracle_size) {
+    std::string file_path = output_path + "_map_capacity.csv";
+    bool write_header = !std::filesystem::exists(file_path) || std::filesystem::file_size(file_path) == 0;
+
+    std::ofstream out_file(file_path, std::ios::app);
+    if (!out_file.is_open()) {
+        std::cerr << "Error! Could not open file " << file_path << " for writing.\n";
+        return;
+    }
+
+    if (write_header) {
+        out_file << "UpdateMapCapacity,NextOracleSize\n";
+    }
+
+    out_file << map_capacity << "," << next_oracle_size << "\n";
     out_file.close();
 }

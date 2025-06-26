@@ -68,9 +68,8 @@ def main():
         for r in range(RANDOM_SEED, END + 1):
             subprocess.run([
                 FILE_TONIC, "0", str(r), str(memory_budget), "0.05", "0.2",
-                dataset_path, args.oracle_min_degree_path, "nodes",
-                f"{OUTPUT_PATH_TONIC}_min_degree"
-            ])
+                dataset_path, args.oracle_min_degree_path, "nodes", OUTPUT_PATH_TONIC
+            ], check=True)
 
 if __name__ == "__main__":
     main()

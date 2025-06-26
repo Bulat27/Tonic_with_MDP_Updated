@@ -1,0 +1,22 @@
+n_trials: 50
+
+dataset_folders:
+  - /home/nikolabulat/Snapshot_Update/Tonic/datasets/as_733
+  - /home/nikolabulat/Snapshot_Update/Tonic/datasets/as_caida
+  - /home/nikolabulat/Snapshot_Update/Tonic/datasets/oregon
+
+oracle_exact_paths:
+  - /home/nikolabulat/Snapshot_Update/Tonic/oracles/as_733/edges_top10.txt
+  - /home/nikolabulat/Snapshot_Update/Tonic/oracles/as_caida/edges_top10.txt
+  - /home/nikolabulat/Snapshot_Update/Tonic/oracles/oregon/edges_top10.txt
+
+oracle_min_paths:
+  - /home/nikolabulat/Snapshot_Update/Tonic/oracles/as_733/node_md.txt
+  - /home/nikolabulat/Snapshot_Update/Tonic/oracles/as_caida/node_md.txt
+  - /home/nikolabulat/Snapshot_Update/Tonic/oracles/oregon/node_md.txt
+
+names:
+  - as_733_fixed
+  - as_caida_fixed
+  - oregon_fixed
+

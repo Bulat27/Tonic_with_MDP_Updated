@@ -1050,3 +1050,15 @@ old_implementations/
 .vscode/
 output/
 preliminary_analysis/outputs
+preliminary_analysis/plots
+preliminary_analysis/auxiliary_input
+fair_experiments/
+fixed_predictor_experiments
+my_rerunning_scripts/
+preliminary_analysis/code/analysis/
+scripts/experiments/meta_scripts
+datasets/
+oracles/
+scripts/experiments/output/
+plots_and_tables/
+tables_check/

@@ -1,4 +1,5 @@
 import subprocess
+import os
 
 def get_total_edges(exact_output_path):
     """ Reads the output of RunExactAlgo and extracts the total number of edges. """
@@ -15,3 +16,10 @@ def run_exact_algorithm(file_exact, dataset_path, output_exact):
 def read_top_k_lines(file_path, n):
     with open(file_path, 'r') as f:
         return [next(f) for _ in range(n)]
+
+def clean_auxiliary_files(output_folder):
+    """Removes all files in the output folder that contain 'seed' in their filenames."""
+    for filename in os.listdir(output_folder):
+        if 'seed' in filename:
+            filepath = os.path.join(output_folder, filename)
+            os.remove(filepath)

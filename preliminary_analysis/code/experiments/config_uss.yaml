@@ -1,0 +1,18 @@
+n_trials: 50
+c_values: [1, 2, 3, 4]
+
+dataset_folders:
+  - /home/nikolabulat/sample/Tonic/datasets/as_733
+  - /home/nikolabulat/sample/Tonic/datasets/as_caida_122
+  - /home/nikolabulat/sample/Tonic/datasets/oregon
+
+oracle_folders:
+  - /home/nikolabulat/sample/Tonic/oracles/as_733/nodes_practical_real
+  - /home/nikolabulat/sample/Tonic/oracles/as_caida_122/nodes_practical_real
+  - /home/nikolabulat/sample/Tonic/oracles/oregon/nodes_practical_real
+
+names:
+  - as_733
+  - as_caida
+  - oregon
+

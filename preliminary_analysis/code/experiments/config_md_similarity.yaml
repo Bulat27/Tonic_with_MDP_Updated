@@ -1,0 +1,11 @@
+script_name: "exec_previous_snapshot_mdp_similarity_experiments.py"
+
+oracle_folders:
+  - /home/nikolabulat/sample/Tonic/oracles/as_733/nodes_practical_real
+  - /home/nikolabulat/sample/Tonic/oracles/as_caida_122/nodes_practical_real
+  - /home/nikolabulat/sample/Tonic/oracles/oregon/nodes_practical_real
+  
+base_names:
+  - previous_snapshot_as_733
+  - previous_snapshot_as_caida
+  - previous_snapshot_as_oregon

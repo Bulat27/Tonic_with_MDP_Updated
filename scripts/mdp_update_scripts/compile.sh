@@ -6,9 +6,13 @@ if [[ "$PWD" != */scripts/mdp_update_scripts ]]; then
     exit
 fi
 
+# Remove and recreate the code directory
+rm -rf code
+mkdir code
+cd code
+
 # -- COMPILE TONIC
 echo "Compiling Tonic code..."
-cd code
 rm -rf Tonic-build
 mkdir Tonic-build
 cd Tonic-build

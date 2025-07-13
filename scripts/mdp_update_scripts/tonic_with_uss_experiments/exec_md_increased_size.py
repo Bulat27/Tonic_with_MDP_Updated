@@ -4,6 +4,15 @@ import subprocess
 from utils import run_exact_algorithm, read_top_k_lines
 
 def parse_args():
+    """
+    Parses command-line arguments for running TONIC with MinDegreePredictor,
+    using an increased number of oracle entries (MDIncreasedSize in the paper).
+
+    Returns:
+        argparse.Namespace: Parsed arguments including dataset path, oracle path,
+        nbar values, multiplier, number of trials, and output name.
+
+    """
     parser = argparse.ArgumentParser(description="Run TONIC on graph snapshots using MinDegreePredictor with increased number of entries.")
     parser.add_argument('-d', '--dataset_folder', required=True, help='Dataset folder containing graph snapshots')
     parser.add_argument('-o', '--oracle_file', required=True, help='All node-degree pairs for the first snapshot in descending order')
@@ -14,13 +23,22 @@ def parse_args():
     return parser.parse_args()
 
 def main():
+    """
+    Main function to run TONIC on a sequence of graph snapshots using a MinDegreePredictor with increased size.
+
+    For each snapshot:
+    - It computes the oracle size as current_nbar + c × next_nbar
+    - Takes that number of entries from the file with all node-degree pairs
+    - Runs the exact triangle counting algorithm to determine the total number of edges
+    - Runs TONIC for each seed/trial using the constructed oracle
+    """
     args = parse_args()
 
     RANDOM_SEED = 4177
     END = RANDOM_SEED + args.n_trials - 1
 
-    FILE_TONIC = "/home/nikolabulat/Snapshot_Update/Tonic/build/Tonic"
-    FILE_EXACT = "/home/nikolabulat/Snapshot_Update/Tonic/build/RunExactAlgo"
+    FILE_TONIC = "./code/Tonic-build/Tonic"
+    FILE_EXACT = "./code/Tonic-build/RunExactAlgo"
 
     OUTPUT_FOLDER = f"output/SnapshotExperiments/{args.name}"
     os.makedirs(OUTPUT_FOLDER, exist_ok=True)
@@ -35,7 +53,6 @@ def main():
 
     dataset_files = sorted(os.listdir(args.dataset_folder))
 
-    # Load number of lines to keep from oracle for each snapshot
     with open(args.nbar_file, 'r') as f:
         nbar_values = [int(line.strip()) for line in f if line.strip()]
 
@@ -50,14 +67,15 @@ def main():
         # We do not increase the predictor size for the last snapshot
         next_nbar = nbar_values[idx + 1] if idx + 1 < len(nbar_values) else 0
 
+        # Compute the size for MDIncreased
         oracle_size = current_nbar + args.c_multiplier * next_nbar
 
-        # Build truncated oracle
+        # Take the calculated number of entries from the file that contains all node-degree pairs
         top_lines = read_top_k_lines(args.oracle_file, oracle_size)
         with open(TEMP_ORACLE_PATH, 'w') as f:
             f.writelines(top_lines)
 
-        # Run Exact to get total number of edges
+        # Run Exact algorithm
         total_edges = run_exact_algorithm(FILE_EXACT, dataset_path, OUTPUT_PATH_EXACT)
         print(f"Total number of edges: {total_edges}")
 

@@ -3,7 +3,21 @@ import time
 import yaml
 
 def launch_independent_runs(script_name, c_values, dataset_folders, oracle_min_paths, nbar_files, base_names, n_trials):
+    """
+    Launches multiple independent runs of a script with different values of c and dataset configurations.
 
+    Each subprocess executes `script_name` with parameters specified from the input lists. The script is 
+    launched once for each combination of (dataset, oracle, nbar, base_name) and c value.
+
+    Args:
+        script_name (str): Path to the Python script to be executed (e.g., 'exec_md_updated.py')
+        c_values (list[int]): List of `c` values (multiplier for oracle size)
+        dataset_folders (list[str]): List of dataset folders (each containing graph snapshots)
+        oracle_min_paths (list[str]): List of paths to (initial) MinDegreePredictor oracles
+        nbar_files (list[str]): List of file paths with precomputed n_bar values
+        base_names (list[str]): List of base names used to generate output identifiers
+        n_trials (int): Number of trials to run per configuration
+    """
     assert len(dataset_folders) == len(oracle_min_paths) == len(nbar_files) == len(base_names), \
         "All dataset-related lists must be the same length."
 
@@ -31,7 +45,7 @@ def launch_independent_runs(script_name, c_values, dataset_folders, oracle_min_p
             print(f"Launching: {' '.join(cmd)}")
             p = subprocess.Popen(cmd)
             processes.append((full_name, p))
-            time.sleep(1)  # Optional: reduce simultaneous load
+            time.sleep(1)  # Optional delay to avoid overloading
 
     print("\nAll processes launched. Waiting for completion...\n")
 
@@ -42,7 +56,7 @@ def launch_independent_runs(script_name, c_values, dataset_folders, oracle_min_p
 
 if __name__ == "__main__":
     # Load from YAML
-    with open("fair_experiments.yaml", "r") as f:
+    with open("config/md-updated-fair-experiments.yaml", "r") as f:
         config = yaml.safe_load(f)
 
     script_name = config["script_name"]

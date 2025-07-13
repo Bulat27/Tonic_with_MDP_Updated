@@ -1,11 +1,21 @@
 #include "Unbiased_Space_Saving.h"
 #include <algorithm>
 
+/**
+ * Constructor for UnbiasedSpaceSaving
+ * @param k capacity of the heap (number of tracked nodes)
+ * @param seed random seed used for probabilistic replacement
+ */
 UnbiasedSpaceSaving::UnbiasedSpaceSaving(int k, int seed)
     : capacity_(k), gen_(seed), dist_(0.0, 1.0) {
     heap_.resize(k, {-1, 0});  // Dummy node: -1 means unused
 }
 
+/**
+ * Update the frequency of a node in the heap.
+ * If the node is not present, it may replace the minimum element.
+ * @param node node ID to be updated
+ */
 void UnbiasedSpaceSaving::update(int node) {
     auto it = node_to_index_.find(node);
     if (it != node_to_index_.end()) {
@@ -33,6 +43,11 @@ void UnbiasedSpaceSaving::update(int node) {
     }
 }
 
+/**
+ * Return the top-n nodes with highest frequency estimates
+ * @param n number of top nodes to return
+ * @return reference to a vector of top-n HeapNodes
+ */
 const std::vector<UnbiasedSpaceSaving::HeapNode>& UnbiasedSpaceSaving::top_n(int n) {
     if (n > static_cast<int>(heap_.size()))
         n = heap_.size();
@@ -47,14 +62,28 @@ const std::vector<UnbiasedSpaceSaving::HeapNode>& UnbiasedSpaceSaving::top_n(int
     return heap_;
 }
 
+/**
+ * Return index of the left child in the heap
+ * @param i parent index
+ * @return left child index
+ */
 int UnbiasedSpaceSaving::left(int i) const {
     return 2 * i + 1;
 }
 
+/**
+ * Return index of the right child in the heap
+ * @param i parent index
+ * @return right child index
+ */
 int UnbiasedSpaceSaving::right(int i) const {
     return 2 * i + 2;
 }
 
+/**
+ * Restore heap order by moving the node at index i downwards
+ * @param i index to sift down
+ */
 void UnbiasedSpaceSaving::sift_down(int i) {
     int n = capacity_;
     while (true) {
@@ -68,6 +97,11 @@ void UnbiasedSpaceSaving::sift_down(int i) {
     }
 }
 
+/**
+ * Swap two heap nodes and update their indices
+ * @param i first index
+ * @param j second index
+ */
 void UnbiasedSpaceSaving::swap_nodes(int i, int j) {
     std::swap(heap_[i], heap_[j]);
     node_to_index_[heap_[i].node] = i;

@@ -93,6 +93,11 @@ void run_tonic_algo_FD(std::string &dataset_path, Tonic_FD &algo) {
 
 }
 
+/**
+ * Read stream and perform the USS algorithm for graph snapshots
+ * @param dataset_path
+ * @param uss Reference to an instantiated UnbiasedSpaceSaving object
+ */
 void run_uss_algo(std::string &dataset_path, UnbiasedSpaceSaving &uss) {
 
     std::ifstream file(dataset_path);
@@ -303,6 +308,7 @@ int main(int argc, char **argv) {
         }
     }
 
+    // -- USS Algo
     if (strcmp(project, "RunUSS") == 0) {
         if (argc != 6) {
             std::cerr << "Usage: RunUSS <dataset_path> <output_path_prefix> <k> <seed> <n_bar>\n";
@@ -438,7 +444,7 @@ int main(int argc, char **argv) {
 
             run_tonic_algo(dataset_path, tonic_algo);
             
-            // put the sorting and slicing within the measured time
+            // put the sorting and slicing within the measured time (USS)
             if(uss_flag == 1){
                 top_nodes = &tonic_algo.get_top_nodes(next_oracle_size);
             }
@@ -449,7 +455,7 @@ int main(int argc, char **argv) {
             write_results(std::string("TonicINS"), tonic_algo.get_global_triangles(), time,
                           output_path, edge_oracle_flag, alpha, beta, memory_budget, size_oracle, time_oracle);
             
-            // put the writing outside of measured time
+            // put the writing outside of measured time (USS)
             if(uss_flag == 1){
                 Utils::write_top_nodes(output_path, *top_nodes);
                 Utils::write_map_capacity(output_path, update_map_capacity, next_oracle_size);

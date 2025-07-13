@@ -12,7 +12,7 @@ oracle_folders:
   - /home/nikolabulat/sample/Tonic/oracles/oregon/nodes_practical_real
 
 names:
-  - as_733
-  - as_caida
-  - oregon
+  - as_733_new
+  - as_caida_new
+  - oregon_new
 

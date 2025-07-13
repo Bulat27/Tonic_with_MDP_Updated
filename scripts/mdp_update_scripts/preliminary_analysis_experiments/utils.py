@@ -5,6 +5,17 @@ def write_metric_to_file(filepath, snapshot_idx, value):
         f.write(f"{snapshot_idx} {value:.6f}\n")
 
 def load_node_frequencies_txt(filename):
+    """
+    Loads node frequency data from a .txt file.
+    
+    Assumes each line is of the form: <node_id> <frequency>.
+
+    Args:
+        filename (str): Path to the .txt file.
+
+    Returns:
+        list[tuple[int, int]]: List of (node_id, frequency) tuples sorted by descending frequency.
+    """
     results = []
     with open(filename, 'r') as f:
         for line in f:
@@ -17,6 +28,17 @@ def load_node_frequencies_txt(filename):
 
 
 def load_node_frequencies_csv(filename):
+    """
+    Loads node frequency data from a .csv file.
+
+    Assumes the file has a header and rows of the form: node_id,freq
+
+    Args:
+        filename (str): Path to the .csv file.
+
+    Returns:
+        list[tuple[int, int]]: List of (node_id, frequency) tuples sorted by descending frequency.
+    """
     results = []
     with open(filename, 'r') as f:
         next(f)  # skip header
@@ -29,6 +51,18 @@ def load_node_frequencies_csv(filename):
     return sorted(results, key=lambda x: -x[1])
 
 def load_node_frequencies(filename):
+    """
+    Automatically loads node frequency data based on file extension.
+
+    Args:
+        filename (str): Path to the file (.csv or .txt).
+
+    Returns:
+        list[tuple[int, int]]: Sorted (node_id, frequency) list.
+
+    Raises:
+        ValueError: If the file extension is not .csv or .txt.
+    """
     ext = os.path.splitext(filename)[1].lower()
     if ext == ".csv":
         return load_node_frequencies_csv(filename)

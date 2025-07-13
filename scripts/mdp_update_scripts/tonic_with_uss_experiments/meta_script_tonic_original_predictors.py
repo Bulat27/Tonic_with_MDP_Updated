@@ -2,7 +2,21 @@ import subprocess
 import time
 import yaml
 
-def launch_independent_runs(dataset_folders, oracle_exact_paths, oracle_min_paths, names, n_trials):
+def launch_independent_runs(script_path, dataset_folders, oracle_exact_paths, oracle_min_paths, names, n_trials):
+    """
+    Launches multiple independent runs of the "exec_md_original_exact_original_tonic.py" script using subprocesses.
+
+    Each run is configured with a specific dataset folder, oracle paths, and name.
+    Ensures the number of datasets, oracles, and names are aligned.
+
+    Args:
+        script_path (str): Path to the script to be executed (exec_md_original_exact_original_tonic.py)
+        dataset_folders (list[str]): List of dataset folders containing graph snapshots, one per experiment
+        oracle_exact_paths (list[str]): List of paths to exact oracles, one per experiment
+        oracle_min_paths (list[str]): List of paths to MinDegreePredictor oracles, one per experiment
+        names (list[str]): List of experiment identifiers (used in naming outputs)
+        n_trials (int): Number of trials to be passed to each script
+    """
     assert len(dataset_folders) == len(oracle_exact_paths) == len(oracle_min_paths) == len(names), \
         "All dataset-related lists must be the same length."
 
@@ -15,7 +29,7 @@ def launch_independent_runs(dataset_folders, oracle_exact_paths, oracle_min_path
         name = names[i]
 
         cmd = [
-            "bash", "exec_snapshots_tonic.sh",
+            "python", script_path,
             "-d", dataset_folder,
             "-o", oracle_exact,
             "-i", oracle_min,
@@ -36,7 +50,7 @@ def launch_independent_runs(dataset_folders, oracle_exact_paths, oracle_min_path
 
 
 if __name__ == "__main__":
-    with open("config_tonic.yaml", "r") as f:
+    with open("config/tonic-original-predictors.yaml", "r") as f:
         config = yaml.safe_load(f)
 
     dataset_folders = config["dataset_folders"]
@@ -45,4 +59,6 @@ if __name__ == "__main__":
     names = config["names"]
     n_trials = config["n_trials"]
 
-    launch_independent_runs(dataset_folders, oracle_exact_paths, oracle_min_paths, names, n_trials)
+    script_path = "exec_md_original_exact_original_tonic.py"
+
+    launch_independent_runs(script_path, dataset_folders, oracle_exact_paths, oracle_min_paths, names, n_trials)

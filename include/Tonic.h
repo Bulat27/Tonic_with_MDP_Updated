@@ -122,7 +122,7 @@ public:
     inline unsigned long long get_edges_processed() const;
 
     // -- USS
-    void setup_space_saving();  // Called after setting size_oracle
+    void setup_space_saving();
 
     const std::vector<UnbiasedSpaceSaving::HeapNode>& get_top_nodes(int n);
 };

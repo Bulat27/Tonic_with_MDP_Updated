@@ -5,6 +5,14 @@ from evaluation import evaluate_recall, evaluate_rbo
 from utils import write_metric_to_file
 
 def parse_args():
+    """
+    Parses command-line arguments for running and evaluating the USS algorithm
+    on a sequence of graph snapshots.
+
+    Returns:
+        argparse.Namespace: Parsed arguments including dataset folder, oracle folder,
+        multiplier, number of trials, and experiment name
+    """
     parser = argparse.ArgumentParser(description="Run USS on graph snapshots and evaluate performance")
     parser.add_argument("-d", "--dataset_folder", required=True, help="Dataset folder containing graph snapshots")
     parser.add_argument("-o", "--oracle_folder", required=True, help="Folder containing ground-truth oracle files")
@@ -14,12 +22,28 @@ def parse_args():
     return parser.parse_args()
 
 def process_graph_stream(uss_binary, input_file, output_file_prefix, k, n_bar, seed):
+    """
+    Runs the USS on a single graph snapshot with the given parameters.
+    """
     subprocess.run([uss_binary, input_file, output_file_prefix, str(k), str(seed), str(n_bar)], check=True)
 
 def main():
+    """
+    Main function to run the USS algorithm across a sequence of graph snapshots and evaluate its performance.
+
+    - For each snapshot:
+        - It runs USS (if results do not already exist, i.e., if not already run before)
+        - Evaluates RBO and recall against the ground-truth oracle
+        - Logs per-trial metrics to .txt files and appends global results to a CSV
+    
+    Output:
+        - One folder per trial inside output/USSExperiments/{name}
+        - Per-trial recall.txt and rbo.txt logs
+        - Global summary CSV at: output/USSExperiments/{name}/uss_full_results.csv
+    """
     args = parse_args()
 
-    FILE_USS = "/home/nikolabulat/Snapshot_Update/Tonic/build/RunUSS"
+    FILE_USS = "./code/Tonic-build/RunUSS"
     OUTPUT_ROOT = f"output/USSExperiments/{args.name}"
     os.makedirs(OUTPUT_ROOT, exist_ok=True)
 
@@ -30,7 +54,6 @@ def main():
 
     STARTING_SEED = 4177
 
-    # Open CSV file for writing
     final_csv_path = os.path.join(OUTPUT_ROOT, "uss_full_results.csv")
     with open(final_csv_path, "w") as out_csv:
         out_csv.write("Algo,c,RBO,Recall\n")
@@ -64,7 +87,6 @@ def main():
                 write_metric_to_file(recall_log_file, snapshot_idx, recall_score)
                 write_metric_to_file(rbo_log_file, snapshot_idx, rbo_score)
 
-                # Append to flat CSV
                 out_csv.write(f"USS,{args.multiplier},{rbo_score:.6f},{recall_score:.6f}\n")
 
 if __name__ == "__main__":

@@ -5,6 +5,15 @@ import math
 from utils import run_exact_algorithm, read_top_k_lines
 
 def parse_args():
+    """
+    Parses command-line arguments for running TONIC with partial split of additional entries:
+    half of the additional entries go to the memory budget, and half to the 
+    MinDegreePredictor size (MDHalfHalf in the paper).
+
+    Returns:
+        argparse.Namespace: Parsed arguments including dataset folder, oracle path,
+        nbar file, multiplier, number of trials, and output name.
+    """
     parser = argparse.ArgumentParser(description="Run TONIC on graph snapshots with half of the additional entries to the memory budget and half to the MinDegreePredictor from the first snapshot")
     parser.add_argument('-d', '--dataset_folder', required=True, help='Dataset folder containing the graph snapshots')
     parser.add_argument('-o', '--oracle_min_degree_path', required=True, help='All node-degree pairs for the first snapshot in descending order')
@@ -15,10 +24,22 @@ def parse_args():
     return parser.parse_args()
 
 def main():
+    """
+    Main function to run TONIC on a sequence of graph snapshots using a MinDegreePredictor with the following setting:
+    - half of the additional entries are used to increase the MinDegreePredictor size
+    - the other half is used to increase the memory budget
+    
+    For each snapshot:
+    - The additional budget (c × next_nbar + current_nbar - first_nbar) is split equally
+    - Takes n_bar plus the half of additional entries from the file with all node-degree pairs
+    - Computes the increased memory budget
+    - TONIC is executed for multiple trials using the constructed oracle and budget
+    
+    """
     args = parse_args()
 
-    FILE_TONIC = "/home/nikolabulat/Snapshot_Update/Tonic/build/Tonic"
-    FILE_EXACT = "/home/nikolabulat/Snapshot_Update/Tonic/build/RunExactAlgo"
+    FILE_TONIC = "./code/Tonic-build/Tonic"
+    FILE_EXACT = "./code/Tonic-build/RunExactAlgo"
 
     RANDOM_SEED = 4177
     END = RANDOM_SEED + args.n_trials - 1
@@ -51,22 +72,24 @@ def main():
         current_nbar = nbar_values[idx]
         next_nbar = nbar_values[idx + 1] if idx + 1 < len(nbar_values) else 0
 
+        # Compute the number of additional entries to expand the MinDegreePredictor size and add it to n_bar (original size).
         size_increase = math.ceil((current_nbar + args.c_multiplier * next_nbar - first_nbar) / 2)
         oracle_size = first_nbar + size_increase
 
-        # Build truncated oracle
+        # Take the calculated number of entries from the file that contains all node-degree pairs
         top_lines = read_top_k_lines(args.oracle_min_degree_path, oracle_size)
         with open(TEMP_ORACLE_PATH, 'w') as f:
             f.writelines(top_lines)
 
-        # Run Exact to get total number of edges
+        # Run Exact algorithm
         total_m = run_exact_algorithm(FILE_EXACT, dataset_path, OUTPUT_PATH_EXACT)
         print(f"Total number of edges: {total_m}")
 
-        # Compute memory budget
+        # Compute the base memory budget
         perc_k = 0.1
         base_mem = int(perc_k * total_m)
         
+        # Compute the additional memory budget and add it to the base
         extra_mb = (current_nbar + args.c_multiplier * next_nbar - first_nbar) // 2
         memory_budget = base_mem + extra_mb
 

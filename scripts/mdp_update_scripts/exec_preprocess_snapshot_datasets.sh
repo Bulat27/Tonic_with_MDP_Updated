@@ -21,7 +21,7 @@ while getopts i:o:d:s: flag; do
 done
 
 # Fixed path to the binary
-FILE_PREPROCESSING=/home/nikolabulat/Snapshot_Update/Tonic/build/DataPreprocessing
+FILE_PREPROCESSING=./code/Tonic-build/DataPreprocessing
 
 # Create the output folder if it doesn't exist
 mkdir -p "$OUTPUT_FOLDER"

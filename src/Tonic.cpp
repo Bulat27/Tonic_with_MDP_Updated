@@ -183,6 +183,10 @@ double Tonic::get_local_triangles(const int u) const {
     }
 }
 
+/**
+ *  Function that instantiates the internal USS heap (`ss_heap_`) using the configured
+ * `update_map_capacity` and `random_seed_`. It is called automatically if the USS flag is enabled.
+ */
 void Tonic::setup_space_saving() {
     ss_heap_ = UnbiasedSpaceSaving(update_map_capacity, random_seed_);
 }
@@ -369,10 +373,10 @@ const std::vector<UnbiasedSpaceSaving::HeapNode>& Tonic::get_top_nodes(int n) {
 }
 
 /**
- * Function that processes an edge (src, dst). First performs the count of triangles, then samples the edge accordingly.
- * deletions
- * @param src
- * @param dst
+ * Function that processes an edge (src, dst). It performs the count of triangles, and then samples the edge accordingly.
+ * If USS is enabled, it also updates the node degree estimates.
+ * @param u
+ * @param v
  */
 void Tonic::process_edge(const int u, const int v) {
 

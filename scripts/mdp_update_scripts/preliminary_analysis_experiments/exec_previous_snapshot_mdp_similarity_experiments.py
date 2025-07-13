@@ -4,12 +4,35 @@ from evaluation import evaluate_recall, evaluate_rbo
 from utils import write_metric_to_file
 
 def parse_args():
+    """
+    Parses command-line arguments for evaluating the similarity between
+    MinDegreePredictors across graph snapshots. Similarity (RBO) is calculated between the MinDegreePredictor
+    maps of the current and the previous snapshot.
+
+    Returns:
+        argparse.Namespace: Parsed arguments with oracle folder path and output name.
+    """
     parser = argparse.ArgumentParser(description="Evaluate Previous Snapshot MinDegreePredictor against all MinDegreePredictors")
     parser.add_argument("-o", "--oracle_folder", required=True, help="Folder containing MinDegreePredictor files")
     parser.add_argument("-n", "--name", required=True, help="Output name")
     return parser.parse_args()
 
 def main():
+    """
+    Evaluates the similarity between MinDegreePredictors across consecutive graph snapshots.
+    Similarity (measured using RBO) is calculated between the MinDegreePredictor
+    maps of the current and the previous snapshot.
+
+    For each snapshot (excluding the first):
+    - It compares the MinDegreePredictor from snapshot i-1 (previous) to snapshot i (current)
+    - Computes Recall and RBO similarity between the two
+    - Saves per-snapshot metrics to text files
+    - Writes a CSV summarizing the full results
+
+    Output:
+        - recall.txt and rbo.txt in a `run/` subfolder
+        - summary CSV at: output/MDPredictorSimilarityExperiments/{name}/previous_snapshot_predictor_results.csv
+    """
     args = parse_args()
 
     OUTPUT_ROOT = f"output/MDPredictorSimilarityExperiments/{args.name}"

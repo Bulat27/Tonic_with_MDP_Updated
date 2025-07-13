@@ -3,13 +3,28 @@ import argparse
 from itertools import combinations
 
 def parse_args():
+    """
+    Parses command-line arguments for computing n_bar values from graph snapshots.
+
+    Returns:
+        argparse.Namespace: Parsed arguments with dataset_folder, degrees_folder, and output_file.
+    """
     parser = argparse.ArgumentParser(description="Compute n_bar values from graph snapshots.")
-    parser.add_argument('--dataset_folder', required=True, help='Folder containing edge list files')
-    parser.add_argument('--degrees_folder', required=True, help='Folder containing node degree files')
+    parser.add_argument('--dataset_folder', required=True, help='Dataset folder containing graph snapshots')
+    parser.add_argument('--degrees_folder', required=True, help='Folder containing node degree files (containing all node degree-pairs)')
     parser.add_argument('--output_file', required=True, help='Path to output .txt file for storing n_bar values')
     return parser.parse_args()
 
 def load_degrees(degrees_file):
+    """
+    Loads node degrees from a file.
+
+    Args:
+        degrees_file (str): Path to the file containing node degrees. Each line should be: <node_id> <degree>
+
+    Returns:
+        dict: Mapping from node ID (int) to degree (int).
+    """
     degrees = {}
     with open(degrees_file, 'r') as df:
         for line in df:
@@ -20,6 +35,15 @@ def load_degrees(degrees_file):
     return degrees
 
 def load_edges(edges_file):
+    """
+    Loads edges from a file, ignoring timestamps.
+
+    Args:
+        edges_file (str): Path to the file containing edges. Each line should be: <node1> <node2> <timestamp>
+
+    Returns:
+        set: A set of edges represented as tuples (node1, node2).
+    """
     edges = set()
     with open(edges_file, 'r') as ef:
         for line in ef:
@@ -30,6 +54,18 @@ def load_edges(edges_file):
     return edges
 
 def compute_n_bar(degrees_file, edges_file):
+    """
+    Computes the n_bar value, which is the number of unique nodes
+    involved in the top 10% of all the possible edges ranked by minimum degree. Refer to the
+    paper for full details on the computation of n_bar values.
+
+    Args:
+        degrees_file (str): Path to the file with node degrees.
+        edges_file (str): Path to the file with original edges.
+
+    Returns:
+        int: The computed n_bar value.
+    """
     degrees = load_degrees(degrees_file)
     original_edges = load_edges(edges_file)
     nodes = list(degrees.keys())
@@ -49,6 +85,14 @@ def compute_n_bar(degrees_file, edges_file):
     return n_bar
 
 def process_folders(dataset_folder, degrees_folder, output_file_path):
+    """
+    Processes all snapshot files and computes n_bar values for each snapshot.
+
+    Args:
+        dataset_folder (str): Path to the folder containing dataset files.
+        degrees_folder (str): Path to the folder containing node degree files.
+        output_file_path (str): Path to the output file where n_bar values will be written.
+    """
     os.makedirs(os.path.dirname(output_file_path), exist_ok=True)
 
     edges_files = sorted(os.listdir(dataset_folder))

@@ -4,6 +4,14 @@ import subprocess
 from utils import run_exact_algorithm
 
 def parse_args():
+    """
+    Parses command-line arguments for running TONIC with a fixed MinDegreePredictor
+    and a memory budget that increases based on the next oracle size and the multiplier (MDIncreasedBudget in the paper).
+
+    Returns:
+        argparse.Namespace: Parsed arguments including dataset path, oracle path,
+        nbar values file, multiplier, number of trials, and output name.
+    """
     parser = argparse.ArgumentParser(description="Run TONIC on graph snapshots with fixed MinDegreePredictor and increased memory budget")
     parser.add_argument('-d', '--dataset_folder', required=True, help='Dataset folder containing graph snapshots')
     parser.add_argument('-o', '--oracle_min_degree_path', required=True, help='MinDegreePredictor path (from the first snapshot)')
@@ -14,10 +22,20 @@ def parse_args():
     return parser.parse_args()
 
 def main():
+    """
+    Main function to run TONIC on a sequence of graph snapshots with increased memory budget, 
+    using a MinDegreePredictor.
+    
+    For each snapshot:
+    - It runs the exact triangle counting algorithm to determine the total number of edges
+    - Sets a base memory budget as 10% of the number of edges.
+    - Adds extra memory proportional to (current_nbar + c × next_nbar − first_nbar).
+    - Runs TONIC for each trial using the same oracle and varying memory budgets.
+    """
     args = parse_args()
 
-    FILE_TONIC = "/home/nikolabulat/Snapshot_Update/Tonic/build/Tonic"
-    FILE_EXACT = "/home/nikolabulat/Snapshot_Update/Tonic/build/RunExactAlgo"
+    FILE_TONIC = "./code/Tonic-build/Tonic"
+    FILE_EXACT = "./code/Tonic-build/RunExactAlgo"
 
     RANDOM_SEED = 4177
     END = RANDOM_SEED + args.n_trials - 1
@@ -52,13 +70,15 @@ def main():
         # We do not increase the memory budget for the last snapshot
         next_nbar = nbar_values[idx + 1] if idx + 1 < len(nbar_values) else 0
 
+        # Run Exact algorithm
         total_edges = run_exact_algorithm(FILE_EXACT, dataset_path, OUTPUT_PATH_EXACT)
         print(f"Total number of edges: {total_edges}")
         
+        # Compute the base memory budget
         perc_k = 0.1
         base_mem = int(perc_k * total_edges)
 
-        # MinDegreePredictor already contains first_nbar entries, so we subtract them!
+        # Compute the additional memory budget and add it to the base
         extra_mb = current_nbar + args.c_multiplier * next_nbar - first_nbar 
         memory_budget = base_mem + extra_mb
 

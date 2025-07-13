@@ -1,22 +1,23 @@
+script_name: "exec_tonic_with_uss.py"
 n_trials: 50
+c_values: [1, 2, 3, 4, 5]
 
 dataset_folders:
   - /home/nikolabulat/Snapshot_Update/Tonic/datasets/as_733
   - /home/nikolabulat/Snapshot_Update/Tonic/datasets/as_caida
   - /home/nikolabulat/Snapshot_Update/Tonic/datasets/oregon
 
-oracle_exact_paths:
-  - /home/nikolabulat/Snapshot_Update/Tonic/oracles/as_733/edges_top10.txt
-  - /home/nikolabulat/Snapshot_Update/Tonic/oracles/as_caida/edges_top10.txt
-  - /home/nikolabulat/Snapshot_Update/Tonic/oracles/oregon/edges_top10.txt
-
 oracle_min_paths:
   - /home/nikolabulat/Snapshot_Update/Tonic/oracles/as_733/node_md.txt
   - /home/nikolabulat/Snapshot_Update/Tonic/oracles/as_caida/node_md.txt
   - /home/nikolabulat/Snapshot_Update/Tonic/oracles/oregon/node_md.txt
 
-names:
-  - as_733_fixed
-  - as_caida_fixed
-  - oregon_fixed
+nbar_files:
+  - /home/nikolabulat/Snapshot_Update/Tonic/compute_nbar/output/nbar_as_733.txt
+  - /home/nikolabulat/Snapshot_Update/Tonic/compute_nbar/output/nbar_as_caida.txt
+  - /home/nikolabulat/Snapshot_Update/Tonic/compute_nbar/output/nbar_oregon.txt
 
+base_names:
+  - tonic_with_uss_new_as_733
+  - tonic_with_uss_new_as_caida
+  - tonic_with_uss_new_oregon

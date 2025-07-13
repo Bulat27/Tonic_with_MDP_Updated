@@ -37,8 +37,8 @@ def main():
     RANDOM_SEED = 4177
     END = RANDOM_SEED + args.n_trials - 1
 
-    FILE_TONIC = "./code/Tonic-build/Tonic"
-    FILE_EXACT = "./code/Tonic-build/RunExactAlgo"
+    FILE_TONIC = "../code/Tonic-build/Tonic"
+    FILE_EXACT = "../code/Tonic-build/RunExactAlgo"
 
     OUTPUT_FOLDER = f"output/SnapshotExperiments/{args.name}"
     os.makedirs(OUTPUT_FOLDER, exist_ok=True)

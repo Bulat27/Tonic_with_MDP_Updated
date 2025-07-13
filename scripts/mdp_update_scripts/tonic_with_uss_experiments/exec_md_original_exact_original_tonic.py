@@ -32,8 +32,8 @@ def main():
     """
     args = parse_args()
 
-    FILE_TONIC = "./code/Tonic-build/Tonic"
-    FILE_EXACT = "./code/Tonic-build/RunExactAlgo"
+    FILE_TONIC = "../code/Tonic-build/Tonic"
+    FILE_EXACT = "../code/Tonic-build/RunExactAlgo"
 
     RANDOM_SEED = 4177
     END = RANDOM_SEED + args.n_trials - 1

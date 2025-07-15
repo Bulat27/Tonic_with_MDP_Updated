@@ -10,9 +10,9 @@ def parse_args():
         argparse.Namespace: Parsed arguments with dataset_folder, degrees_folder, and output_file.
     """
     parser = argparse.ArgumentParser(description="Compute n_bar values from graph snapshots.")
-    parser.add_argument('--dataset_folder', required=True, help='Dataset folder containing graph snapshots')
-    parser.add_argument('--degrees_folder', required=True, help='Folder containing node degree files (containing all node degree-pairs)')
-    parser.add_argument('--output_file', required=True, help='Path to output .txt file for storing n_bar values')
+    parser.add_argument('-d', '--dataset_folder', required=True, help='Dataset folder containing graph snapshots')
+    parser.add_argument('-g', '--degrees_folder', required=True, help='Folder containing node degree files (containing all node degree-pairs)')
+    parser.add_argument('-o', '--output_file', required=True, help='Path to output .txt file for storing n_bar values')
     return parser.parse_args()
 
 def load_degrees(degrees_file):

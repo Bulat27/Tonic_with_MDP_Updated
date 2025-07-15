@@ -28,7 +28,7 @@ if __name__ == "__main__":
         config = yaml.safe_load(f)
 
     script_name = config["script_name"]
-    oracle_folders = config["oracle_folders"]
+    oracle_folders = config["oracle_min_degree_folders"]
     base_names = config["base_names"]
 
     run_md_similarity_experiments(script_name, oracle_folders, base_names)

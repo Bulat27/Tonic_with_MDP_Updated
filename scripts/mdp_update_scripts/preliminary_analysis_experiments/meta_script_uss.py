@@ -51,7 +51,7 @@ if __name__ == "__main__":
         config = yaml.safe_load(f)
 
     dataset_folders = config["dataset_folders"]
-    oracle_folders = config["oracle_folders"]
+    oracle_folders = config["oracle_min_degree_folders"]
     names = config["names"]
     c_values = config["c_values"]
     n_trials = config["n_trials"]

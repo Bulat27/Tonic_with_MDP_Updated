@@ -1,21 +1,26 @@
+# Number of independent trials to run per snapshot
 n_trials: 50
 
+# List of dataset folders, each containing preprocessed snapshot files
 dataset_folders:
-  - /home/nikolabulat/Snapshot_Update/Tonic/datasets/as_733
-  - /home/nikolabulat/Snapshot_Update/Tonic/datasets/as_caida
-  - /home/nikolabulat/Snapshot_Update/Tonic/datasets/oregon
+  - /path/to/datasets/as_733               
+  - /path/to/datasets/as_caida             
+  - /path/to/datasets/oregon
 
+# Paths to OracleExact predictor files (from the first snapshot of each dataset)
 oracle_exact_paths:
-  - /home/nikolabulat/Snapshot_Update/Tonic/oracles/as_733/edges_top10.txt
-  - /home/nikolabulat/Snapshot_Update/Tonic/oracles/as_caida/edges_top10.txt
-  - /home/nikolabulat/Snapshot_Update/Tonic/oracles/oregon/edges_top10.txt
+  - /path/to/oracles/as_733/first_snapshot_edges_top10.txt
+  - /path/to/oracles/as_caida/first_snapshot_edges_top10.txt
+  - /path/to/oracles/oregon/first_snapshot_edges_top10.txt
 
-oracle_min_paths:
-  - /home/nikolabulat/Snapshot_Update/Tonic/oracles/as_733/node_md.txt
-  - /home/nikolabulat/Snapshot_Update/Tonic/oracles/as_caida/node_md.txt
-  - /home/nikolabulat/Snapshot_Update/Tonic/oracles/oregon/node_md.txt
+# Paths to MinDegreePredictor files (from the first snapshot of each dataset)
+oracle_min_degree_paths:
+  - /path/to/oracles/as_733/first_snapshot_node_md.txt
+  - /path/to/oracles/as_caida/first_snapshot_node_md.txt
+  - /path/to/oracles/oregon/first_snapshot_node_md.txt
 
+# Output names used to label the results for each configuration
 names:
-  - as_733_fixed
-  - as_caida_fixed
-  - oregon_fixed
+  - as_733_original_predictors
+  - as_caida_original_predictors
+  - oregon_original_predictors

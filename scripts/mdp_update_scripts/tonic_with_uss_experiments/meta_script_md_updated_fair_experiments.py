@@ -63,7 +63,7 @@ if __name__ == "__main__":
     c_values = config["c_values"]
     n_trials = config["n_trials"]
     dataset_folders = config["dataset_folders"]
-    oracle_min_paths = config["oracle_min_paths"]
+    oracle_min_paths = config["oracle_min_degree_paths"]
     nbar_files = config["nbar_files"]
     base_names = config["base_names"]
 

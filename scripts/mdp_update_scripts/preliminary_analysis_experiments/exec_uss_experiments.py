@@ -15,7 +15,7 @@ def parse_args():
     """
     parser = argparse.ArgumentParser(description="Run USS on graph snapshots and evaluate performance")
     parser.add_argument("-d", "--dataset_folder", required=True, help="Dataset folder containing graph snapshots")
-    parser.add_argument("-o", "--oracle_folder", required=True, help="Folder containing ground-truth oracle files")
+    parser.add_argument("-o", "--oracle_min_degree_folder", required=True, help="Folder containing ground-truth oracle files")
     parser.add_argument("-c", "--multiplier", type=int, required=True, help="Multiplier for oracle size to set USS capacity")
     parser.add_argument("-t", "--n_trials", type=int, required=True, help="Number of trials per snapshot")
     parser.add_argument("-n", "--name", required=True, help="Name for the output subfolder")
@@ -47,7 +47,7 @@ def main():
     OUTPUT_ROOT = f"output/USSExperiments/{args.name}"
     os.makedirs(OUTPUT_ROOT, exist_ok=True)
 
-    oracle_files = sorted([f for f in os.listdir(args.oracle_folder) if os.path.isfile(os.path.join(args.oracle_folder, f))])
+    oracle_files = sorted([f for f in os.listdir(args.oracle_min_degree_folder) if os.path.isfile(os.path.join(args.oracle_min_degree_folder, f))])
     graph_files = sorted([f for f in os.listdir(args.dataset_folder) if os.path.isfile(os.path.join(args.dataset_folder, f))])
 
     assert len(oracle_files) == len(graph_files), "Mismatch in number of oracle and graph files"
@@ -59,7 +59,7 @@ def main():
         out_csv.write("Algo,c,RBO,Recall\n")
 
         for snapshot_idx, (oracle_file, graph_file) in enumerate(zip(oracle_files, graph_files)):
-            gt_path = os.path.join(args.oracle_folder, oracle_file)
+            gt_path = os.path.join(args.oracle_min_degree_folder, oracle_file)
             input_graph_path = os.path.join(args.dataset_folder, graph_file)
 
             n_bar = sum(1 for line in open(gt_path) if line.strip())

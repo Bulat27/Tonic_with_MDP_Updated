@@ -1,18 +1,23 @@
+# Number of independent trials to run per snapshot
 n_trials: 50
+
+# List of multiplier values to apply to oracle sizes (used to compute USS capacity)
 c_values: [1, 2, 3, 4]
 
+# List of dataset folders, each containing preprocessed graph snapshots
 dataset_folders:
-  - /home/nikolabulat/sample/Tonic/datasets/as_733
-  - /home/nikolabulat/sample/Tonic/datasets/as_caida_122
-  - /home/nikolabulat/sample/Tonic/datasets/oregon
+  - /path/to/datasets/as_733                
+  - /path/to/datasets/as_caida_122
+  - /path/to/datasets/oregon
 
-oracle_folders:
-  - /home/nikolabulat/sample/Tonic/oracles/as_733/nodes_practical_real
-  - /home/nikolabulat/sample/Tonic/oracles/as_caida_122/nodes_practical_real
-  - /home/nikolabulat/sample/Tonic/oracles/oregon/nodes_practical_real
+# List of folders containing the MinDegreePredictor oracle files for each snapshot
+oracle_min_degree_folders:
+  - /path/to/oracles/as_733/node_oracles        
+  - /path/to/oracles/as_caida_122/node_oracles
+  - /path/to/oracles/oregon/node_oracles
 
+# Base names used to label output results for each dataset and parameter combination
 names:
-  - as_733_new
-  - as_caida_new
-  - oregon_new
-
+  - as_733_uss
+  - as_caida_uss
+  - oregon_uss

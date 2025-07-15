@@ -55,7 +55,7 @@ if __name__ == "__main__":
 
     dataset_folders = config["dataset_folders"]
     oracle_exact_paths = config["oracle_exact_paths"]
-    oracle_min_paths = config["oracle_min_paths"]
+    oracle_min_paths = config["oracle_min_degree_paths"]
     names = config["names"]
     n_trials = config["n_trials"]
 

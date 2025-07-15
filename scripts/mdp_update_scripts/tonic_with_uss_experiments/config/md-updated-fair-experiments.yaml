@@ -1,23 +1,34 @@
-script_name: "exec_tonic_with_uss.py"
+# Name of the script to run (exec_md_updated.py, exec_md_increased_size.py, exec_md_increased_budget.py, or exec_md_half_half.py)
+script_name: "exec_md_updated.py"
+
+# Number of independent trials to run per snapshot
 n_trials: 50
-c_values: [1, 2, 3, 4, 5]
 
+# List of multiplier values to apply to the nbar values
+c_values: [1, 2, 3, 4]
+
+# List of dataset folders, each containing preprocessed snapshot files
 dataset_folders:
-  - /home/nikolabulat/Snapshot_Update/Tonic/datasets/as_733
-  - /home/nikolabulat/Snapshot_Update/Tonic/datasets/as_caida
-  - /home/nikolabulat/Snapshot_Update/Tonic/datasets/oregon
+  - /path/to/datasets/as_733
+  - /path/to/datasets/as_caida
+  - /path/to/datasets/oregon
 
-oracle_min_paths:
-  - /home/nikolabulat/Snapshot_Update/Tonic/oracles/as_733/node_md.txt
-  - /home/nikolabulat/Snapshot_Update/Tonic/oracles/as_caida/node_md.txt
-  - /home/nikolabulat/Snapshot_Update/Tonic/oracles/oregon/node_md.txt
+# Paths to the MinDegreePredictor file from the first snapshot of each dataset
+# Important: For exec_md_updated.py and exec_md_increased_budget.py, it should be the MinDegreePredictor with \bar{n}_{1} nodes.
+# For exec_md_increased_size.py and exec_md_half_half.py, it should be the MinDegreePredictor containing all node-degree pairs for the first snapshot.
+oracle_min_degree_paths:
+  - /path/to/oracles/as_733/first_snapshot_node_md.txt
+  - /path/to/oracles/as_caida/first_snapshot_node_md.txt
+  - /path/to/oracles/oregon/first_snapshot_node_md.txt
 
+# Paths to .txt files containing one oracle size (\bar{n}_{i}) per row
 nbar_files:
-  - /home/nikolabulat/Snapshot_Update/Tonic/compute_nbar/output/nbar_as_733.txt
-  - /home/nikolabulat/Snapshot_Update/Tonic/compute_nbar/output/nbar_as_caida.txt
-  - /home/nikolabulat/Snapshot_Update/Tonic/compute_nbar/output/nbar_oregon.txt
+  - /path/to/nbar_files/nbar_as_733.txt
+  - /path/to/nbar_files/nbar_as_caida.txt
+  - /path/to/nbar_files/nbar_oregon.txt
 
+# Base names used to label the output results for each configuration. Make sure to change the name every time you run the script with different parameters.
 base_names:
-  - tonic_with_uss_new_as_733
-  - tonic_with_uss_new_as_caida
-  - tonic_with_uss_new_oregon
+  - tonic_with_uss_as_733
+  - tonic_with_uss_as_caida
+  - tonic_with_uss_oregon

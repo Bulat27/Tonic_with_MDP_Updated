@@ -13,7 +13,7 @@ def parse_args():
         argparse.Namespace: Parsed arguments with oracle folder path and output name.
     """
     parser = argparse.ArgumentParser(description="Evaluate Fixed MinDegreePredictor (first snapshot) against all MinDegreePredictors")
-    parser.add_argument("-o", "--oracle_folder", required=True, help="Folder containing MinDegreePredictor files")
+    parser.add_argument("-o", "--oracle_min_degree_folder", required=True, help="Folder containing MinDegreePredictor files")
     parser.add_argument("-n", "--name", required=True, help="Output name")
     return parser.parse_args()
 
@@ -38,12 +38,12 @@ def main():
     OUTPUT_ROOT = f"output/MDPredictorSimilarityExperiments/{args.name}"
     os.makedirs(OUTPUT_ROOT, exist_ok=True)
 
-    oracle_files = sorted([f for f in os.listdir(args.oracle_folder) if os.path.isfile(os.path.join(args.oracle_folder, f))])
+    oracle_files = sorted([f for f in os.listdir(args.oracle_min_degree_folder) if os.path.isfile(os.path.join(args.oracle_min_degree_folder, f))])
 
     if not oracle_files:
         raise ValueError("No oracle files found in the specified folder.")
 
-    fixed_predictor_path = os.path.join(args.oracle_folder, oracle_files[0])
+    fixed_predictor_path = os.path.join(args.oracle_min_degree_folder, oracle_files[0])
 
     run_output_dir = os.path.join(OUTPUT_ROOT, "run")
     os.makedirs(run_output_dir, exist_ok=True)
@@ -53,7 +53,7 @@ def main():
         out_csv.write("Algo,RBO,Recall\n")
 
         for idx, oracle_file in enumerate(oracle_files):
-            gt_path = os.path.join(args.oracle_folder, oracle_file)
+            gt_path = os.path.join(args.oracle_min_degree_folder, oracle_file)
 
             recall = evaluate_recall(gt_path, fixed_predictor_path)
             rbo_score = evaluate_rbo(gt_path, fixed_predictor_path)

@@ -2,15 +2,15 @@
 
 ---
 
-Here are the instructions for running *Tonic* combined with *Unbiased Space Saving (USS)* to update the *MinDegreePredictor* for sequences of graph streams. In addition to (... requirements).
+Here are the instructions for running *Tonic* combined with *Unbiased Space Saving (USS)* to update the *MinDegreePredictor* for sequences of graph streams.
+
+## Experiments structure
 
 The experiments are split in two parts:
 
-1. Preliminary analysis, which includes the results for *MDSimilarity* and *USS* experiments (*Section 5.3.1* and *Section 5.3.2* in the paper)
+1. Preliminary analysis, including the results for *MDSimilarity* and *USS* experiments (*Section 5.3.1* and *Section 5.3.2* in the paper)
 
 2. *Tonic* with the updated *MinDegreePredictor* (*Section 5.3.3* in the paper)
-
----
 
 In this file, we explain the general structure of the experiments as well as the common steps required for both the preliminary analysis and the final results. Additional steps required to reproduce the results are explained in the corresponding subfolders. Scripts to reproduce the preliminary analysis can be found in the `./preliminary_analysis_experiments` subfolder, while the scripts for the final experiments are located in `./tonic_with_uss_experiments`. Both folders contain two types of scripts:
 
@@ -25,6 +25,15 @@ All meta scripts come with a corresponding configuration file that allows the us
 In the following, we describe how to use the scripts required to prepare the code and data for either the preliminary analysis or the final experiments. All scripts should be run from the `root/scripts/mdp_update_scripts` folder (the folder where this README.md is located), where root refers to the root directory of the GitHub repository. While all steps can alternatively be performed by combining the information provided in `root/README.md`, we provide auxiliary scripts to simplify the process.
 
 *Note*: Before we explain how to use the auxiliary scripts, we need to clarify the terminology regarding our *MinDegreePredictor*. If not stated otherwise, the *MinDegreePredictor* for snapshot *i* refers to the predictor with `\bar{n}_{i}` entries, as defined in the paper. However, for some intermediary steps, we also need all sorted node-degree pairs for snapshot *i*, i.e., a *MinDegreePredictor* containing all the nodes. While our predictor update method does not require these maps in practical applications, we need them to set up the experimental setting and to run some of the baselines. To that end, we will explicitly specify whether a given script expects the path to the actual *MinDegreePredictor* (i.e., truncated to `\bar{n}_{i}`) or to the full node-degree pair file (i.e., *MinDegreePredictor* containing all nodes), when it is not clear from the context.
+
+## Installation
+
+   Please run the following command in `root/scripts/mdp_update_scripts` folder (the folder where this README.md is located) to install the required Python packages:
+   <br><br>
+   `pip install -r requirements.txt`
+   <br><br>
+   
+## Scripts usage
 
 1. Compile the code
    <br><br>

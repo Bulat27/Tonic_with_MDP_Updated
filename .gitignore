@@ -1063,3 +1063,4 @@ scripts/experiments/output/
 plots_and_tables/
 tables_check/
 old_preliminary_analysis/
+.venv/

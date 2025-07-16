@@ -1,7 +1,6 @@
 import os
 import argparse
 from evaluation import evaluate_recall, evaluate_rbo
-from utils import write_metric_to_file
 
 def parse_args():
     """
@@ -26,11 +25,9 @@ def main():
     For each snapshot (excluding the first):
     - It compares the MinDegreePredictor from snapshot i-1 (previous) to snapshot i (current)
     - Computes Recall and RBO similarity between the two
-    - Saves per-snapshot metrics to text files
     - Writes a CSV summarizing the full results
 
     Output:
-        - recall.txt and rbo.txt in a `run/` subfolder
         - summary CSV at: output/MDPredictorSimilarityExperiments/{name}/previous_snapshot_predictor_results.csv
     """
     args = parse_args()
@@ -43,15 +40,10 @@ def main():
     if not oracle_files:
         raise ValueError("No oracle files found in the specified folder.")
 
-    run_output_dir = os.path.join(OUTPUT_ROOT, "run")
-    os.makedirs(run_output_dir, exist_ok=True)
-
-    recall_log_file = os.path.join(run_output_dir, "recall.txt")
-    rbo_log_file = os.path.join(run_output_dir, "rbo.txt")
     csv_path = os.path.join(OUTPUT_ROOT, "previous_snapshot_predictor_results.csv")
 
     with open(csv_path, "w") as csv_file:
-        csv_file.write("Algo,RBO,Recall\n")
+        csv_file.write("Snapshot,Algo,RBO,Recall\n")
 
         for i in range(1, len(oracle_files)):
             prev_path = os.path.join(args.oracle_min_degree_folder, oracle_files[i - 1])
@@ -60,10 +52,8 @@ def main():
             recall = evaluate_recall(curr_path, prev_path)
             rbo_score = evaluate_rbo(curr_path, prev_path)
 
-            write_metric_to_file(recall_log_file, i, recall)
-            write_metric_to_file(rbo_log_file, i, rbo_score)
-
-            csv_file.write(f"Previous Snapshot MDP,{rbo_score:.6f},{recall:.6f}\n")
+            snapshot_number = i + 1
+            csv_file.write(f"{snapshot_number},PreviousSnapshotMDP,{rbo_score:.6f},{recall:.6f}\n")
 
 if __name__ == "__main__":
     main()

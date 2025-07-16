@@ -59,6 +59,6 @@ if __name__ == "__main__":
     names = config["names"]
     n_trials = config["n_trials"]
 
-    script_path = "exec_md_original_exact_original_tonic.py"
+    script_path = "exec_md_and_exact_original.py"
 
     launch_independent_runs(script_path, dataset_folders, oracle_exact_paths, oracle_min_paths, names, n_trials)

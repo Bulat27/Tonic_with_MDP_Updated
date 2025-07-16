@@ -15,13 +15,13 @@ Main results for *Tonic* with *MDUpdated* are reported in *Table 2* in the paper
    `python <script_name>.py -d <dataset_folder> -o <oracle_min_degree_path> -b <nbar_file> -c <multiplier> -t <n_trials> -n <name>`
    <br><br>
    where *script_name* is the name of the script to be run (*exec_md_updated.py*, *exec_md_increased_size.py*, *exec_md_increased_budget.py*, or *exec_md_half_half.py*), *dataset_folder* is the path to the folder containing preprocessed snapshot files, *oracle_min_degree_path* is the path to the *MinDegreePredictor* file obtained from the first snapshot (please read the note below to correctly set this parameter), *nbar_file* is a path to the .txt file containing one oracle size per row, *multiplier* is an integer that scales the values in *nbar_file* (parameter *c* in the paper), *n_trials* is the number of independent trials to run per snapshot, and *name* is the base name for the output results.
-   <br><br>
-
+   
    *Note*: It is important to send the proper file path for the *oracle_min_degree_path* parameter. For *MDUpdated* and *MDIncreasedBudget* experiments (using *exec_md_updated.py* and *exec_md_increased_budget.py* scripts, respectively), it should be the *MinDegreePredictor* for the first snapshot with `\bar{n}_{1}` node-degree pairs. On the other hand, for the *MDIncreasedSize* and *MDHalfHalf* experiments, it should be the *MinDegreePredictor* containing all node-degree pairs for the first snapshot. All the other parameters, except for *name*, are shared across all scripts.
+   <br><br>
 
 2. *MDOriginal* and *OracleExact* experiments are reproduced using one script, which should be run as follows:
     <br><br>
-    `python exec_md_original_exact_original_tonic.py -d <dataset_folder> -o <oracle_exact_path> -i <oracle_min_degree_path> -t <n_trials> -n <name>`
+    `python exec_md_and_exact_original.py -d <dataset_folder> -o <oracle_exact_path> -i <oracle_min_degree_path> -t <n_trials> -n <name>`
      <br><br>
     where *dataset_folder* is the path to the folder containing preprocessed snapshot files, *oracle_exact_path* is the path to the *OracleExact* predictor file generated from the first snapshot, *oracle_min_degree_path* is the path to the *MinDegreePredictor* file generated from the first snapshot, *n_trials* is the number of independent trials to run per snapshot, and *name* is the base name under which the output results will be saved.
 

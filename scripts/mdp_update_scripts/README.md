@@ -12,7 +12,7 @@ The experiments are split in two parts:
 
 2. *Tonic* with the updated *MinDegreePredictor* (*Section 5.3.3* in the paper)
 
-In this file, we explain the general structure of the experiments as well as the common steps required for both the preliminary analysis and the final results. Additional steps required to reproduce the results are explained in the corresponding subfolders. Scripts to reproduce the preliminary analysis can be found in the `./preliminary_analysis_experiments` subfolder, while the scripts for the final experiments are located in `./tonic_with_uss_experiments`. Both folders contain two types of scripts:
+In this file, we explain the general structure of the experiments as well as the common steps required for both the preliminary analysis and the final results. Additional steps required to reproduce the results are explained in the corresponding subfolders. Scripts to reproduce the preliminary analysis can be found in the `./preliminary_analysis_experiments` subfolder, while the scripts for the final experiments are located in `./tonic_with_uss_experiments` Both folders contain two types of scripts:
 
 1. Single-run scripts, which reproduce the result of a single experiment configuration — corresponding to one curve in a plot or one entry in a table (i.e., a specific method with a single setting of parameters).
 
@@ -44,28 +44,35 @@ In the following, we describe how to use the scripts required to prepare the cod
 
 2. Preprocess a sequence of raw snapshot dataset files stored in a folder
    <br><br>
-   `python exec_preprocess_snapshot_datasets.py -i <input_folder> -o <output_folder> -d <delimiter> -s <skip>`
+   `python exec_preprocess_snapshots.py -i <input_folder> -o <output_folder> -d <delimiter> -s <skip>`
    <br><br>
-   where *input_folder* is the path to the folder containing raw snapshot files to be preprocessed, *output_folder* is the destination folder where the preprocessed snapshot files will be stored (with the prefix "preprocessed"), *delimiter* is the character used to separate the rows in each snapshot file, and *skip* is the number of lines to skip before starting to read each snapshot file.
+   where *input_folder* is the path to the folder containing raw snapshot files to be preprocessed, *output_folder* is the destination folder where the preprocessed snapshot files will be stored (with the hardcoded prefix 'preprocessed_'), *delimiter* is the character used to separate the rows in each snapshot file, and *skip* is the number of lines to skip before starting to read each snapshot file.
+
+   *Note*: To pass a **tab character** as the delimiter, use `$'\t'` in the command line (e.g., `-d $'\t'`). To pass a **space character**, enclose it in quotes (e.g., `-d ' '`).
+
    <br><br>
 
 3. Build the oracle for all snapshots in a sequence 
    <br><br>
-    `python exec_build_oracle_snapshot_datasets.py -d <dataset_folder> -t <oracle_type = {Exact, noWR, Node}>  -p <percentage_retain> -x <prefix> -o <output_folder>`
+   `python exec_build_oracle_snapshots.py -d <dataset_folder> -t <oracle_type = {Exact, noWR, Node}> -p <percentage_retain> -x <prefix> -o <output_folder>`
    <br><br>
-   where *dataset_folder* is the path to the folder with preprocessed snapshot files at point (2), *oracle_type* is the type of oracle to be built (Exact, noWR, Node), *percentage_retain* is the fraction of top heaviest edges/nodes to be retained in the oracle, *prefix* is the prefix for each oracle filename, replacing the 'preprocessed' prefix assigned in step (2), and *output_folder* is the destination folder where the oracles will be saved. *Note*: Setting *oracle_type* to 'Node' and *percentage_retain* to '1.0' produces a *MinDegreePredictor* containing all nodes (i.e., all node-degree pairs) for each snapshot, which are required for the next step. While our predictor update method does not require these oracles in practical applications, this step is required to set up the experimental setting from the paper.
+   where *dataset_folder* is the path to the folder with preprocessed snapshot files at point (2), *oracle_type* is the type of oracle to be built (Exact, noWR, Node), *percentage_retain* is the fraction of top heaviest edges/nodes to be retained in the oracle, *prefix* is the prefix for each oracle file name (read the note below for details), and *output_folder* is the destination folder where the oracles will be saved. 
+   
+   *Note*:
+   - Setting `oracle_type = Node` and `percentage_retain = 1.0` produces a *MinDegreePredictor* containing all nodes (i.e., all    node-degree pairs) for each snapshot, which are required for the next step. While our predictor update method does not require these oracles in practical applications, this step is required to set up the experimental setting from the paper.
+   - The original prefix (everything before the last `_` in the input filename) is removed and replaced with *prefix*, e.g., *preprocessed_as19971108.txt* becomes *prefix_as19971108.txt*.
    <br><br>
 
 4. Compute *MinDegreePredictor* sizes (`\bar{n}_{i}` values) for all snapshots in a sequence
    <br><br>
-    `python compute_nbar_snapshots.py -d <dataset_folder> -g <degrees_folder> -o <output_file>`
+   `python compute_nbar_snapshots.py -d <dataset_folder> -g <degrees_folder> -o <output_file>`
    <br><br>
    where *dataset_folder* is the path to the folder with preprocessed snapshot files at point (2), *degrees_folder* is the path to the folder with files containing all node-degree pairs for each snapshot at point (3), and *output_file* is the path where the `\bar{n}_{i}` values (*MinDegreePredictor* sizes) will be saved (one per row).
    <br><br>
 
 5. Truncate the node-degree pair files for each snapshot to the true *MinDegreePredictorSize*:
    <br><br>
-    `python exec_construct_mdp_from_node_degrees_snapshot_datasets.py -i <input_folder> -b <nbar_file> -o <output_folder>`
+   `python exec_construct_mdp_from_node_degrees_snapshots.py -i <oracle_min_degree_folder> -b <nbar_file> -x <prefix> -o <output_folder>`
    <br><br>
-   where *input_folder* is the path to the folder with files containing all node-degree pairs for each snapshot at point (3), *nbar_file* is the path to .txt file with one `\bar{n}_{i}` value per snapshot at point (4), and *output_folder* is the destination folder where the *MinDegreePredictor* oracle for each snapshot will be stored.
+   where *oracle_min_degree_folder* is the path to the folder with files containing *MinDegreePredictor* files with all node-degree pairs for each snapshot at point (3), *nbar_file* is the path to .txt file with one `\bar{n}_{i}` value per snapshot at point (4), *prefix* is the prefix for each oracle file name (read the note in point (3) for details), and *output_folder* is the destination folder where the *MinDegreePredictor* oracles with `\bar{n}_{i}` entries for snapshot *i* will be stored.
    <br><br>

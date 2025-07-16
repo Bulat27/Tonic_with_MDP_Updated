@@ -12,12 +12,12 @@ dataset_folders:
 
 # List of folders containing the MinDegreePredictor oracle files for each snapshot
 oracle_min_degree_folders:
-  - /path/to/oracles/as_733/node_oracles        
-  - /path/to/oracles/as_caida_122/node_oracles
-  - /path/to/oracles/oregon/node_oracles
+  - /path/to/oracles/as_733/min_degree_predictor_folder        
+  - /path/to/oracles/as_caida_122/min_degree_predictor_folder
+  - /path/to/oracles/oregon/min_degree_predictor_folder
 
 # Base names used to label output results for each dataset and parameter combination
 names:
-  - as_733_uss
-  - as_caida_uss
-  - oregon_uss
+  - uss_as_733
+  - uss_as_caida
+  - uss_oregon

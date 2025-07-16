@@ -920,7 +920,7 @@ void Utils::write_top_nodes(const std::string& output_path, const std::vector<Un
  * @param next_oracle_size number of nodes in the next oracle
  */
 void Utils::write_map_capacity(const std::string& output_path, int map_capacity, int next_oracle_size) {
-    std::string file_path = output_path + "_map_capacity.csv";
+    std::string file_path = output_path + "_uss_map_capacity.csv";
     bool write_header = !std::filesystem::exists(file_path) || std::filesystem::file_size(file_path) == 0;
 
     std::ofstream out_file(file_path, std::ios::app);

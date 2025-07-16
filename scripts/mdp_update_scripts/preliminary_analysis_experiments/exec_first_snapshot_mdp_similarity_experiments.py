@@ -1,7 +1,6 @@
 import os
 import argparse
 from evaluation import evaluate_recall, evaluate_rbo
-from utils import write_metric_to_file
 
 def parse_args():
     """
@@ -26,11 +25,9 @@ def main():
     For each snapshot (excluding the first):
     - It compares the MinDegreePredictor from snapshot 1 (the first snapshot) to snapshot i (current)
     - Computes Recall and RBO similarity between the two
-    - Saves per-snapshot metrics to text files
     - Writes a CSV summarizing the full results
 
     Output:
-        - recall.txt and rbo.txt in a `run/` subfolder
         - summary CSV at: output/MDPredictorSimilarityExperiments/{name}/previous_snapshot_predictor_results.csv
     """
     args = parse_args()
@@ -45,12 +42,9 @@ def main():
 
     fixed_predictor_path = os.path.join(args.oracle_min_degree_folder, oracle_files[0])
 
-    run_output_dir = os.path.join(OUTPUT_ROOT, "run")
-    os.makedirs(run_output_dir, exist_ok=True)
-
     final_csv_path = os.path.join(OUTPUT_ROOT, "first_snapshot_predictor_results.csv")
     with open(final_csv_path, "w") as out_csv:
-        out_csv.write("Algo,RBO,Recall\n")
+        out_csv.write("Snapshot,Algo,RBO,Recall\n")
 
         for idx, oracle_file in enumerate(oracle_files):
             gt_path = os.path.join(args.oracle_min_degree_folder, oracle_file)
@@ -58,14 +52,8 @@ def main():
             recall = evaluate_recall(gt_path, fixed_predictor_path)
             rbo_score = evaluate_rbo(gt_path, fixed_predictor_path)
 
-            # Write individual metrics to .txt
-            recall_log_file = os.path.join(run_output_dir, "recall.txt")
-            rbo_log_file = os.path.join(run_output_dir, "rbo.txt")
-            write_metric_to_file(recall_log_file, idx, recall)
-            write_metric_to_file(rbo_log_file, idx, rbo_score)
-
-            # Append CSV containg all the results
-            out_csv.write(f"First Snapshot MDP,{rbo_score:.6f},{recall:.6f}\n")
+            snapshot_number = idx + 1
+            out_csv.write(f"{snapshot_number},FirstSnapshotMDP,{rbo_score:.6f},{recall:.6f}\n")
 
 if __name__ == "__main__":
     main()

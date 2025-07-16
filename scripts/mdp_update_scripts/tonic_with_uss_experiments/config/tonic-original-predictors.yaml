@@ -9,18 +9,18 @@ dataset_folders:
 
 # Paths to OracleExact predictor files (from the first snapshot of each dataset)
 oracle_exact_paths:
-  - /path/to/oracles/as_733/first_snapshot_edges_top10.txt
-  - /path/to/oracles/as_caida/first_snapshot_edges_top10.txt
-  - /path/to/oracles/oregon/first_snapshot_edges_top10.txt
+  - /path/to/oracles/as_733/first_snapshot_exact_predictor.txt
+  - /path/to/oracles/as_caida/first_snapshot_exact_predictor.txt
+  - /path/to/oracles/oregon/first_snapshot_exact_predictor.txt
 
 # Paths to MinDegreePredictor files (from the first snapshot of each dataset)
 oracle_min_degree_paths:
-  - /path/to/oracles/as_733/first_snapshot_node_md.txt
-  - /path/to/oracles/as_caida/first_snapshot_node_md.txt
-  - /path/to/oracles/oregon/first_snapshot_node_md.txt
+  - /path/to/oracles/as_733/first_snapshot_min_degree_predictor.txt
+  - /path/to/oracles/as_caida/first_snapshot_min_degree_predictor.txt
+  - /path/to/oracles/oregon/first_snapshot_min_degree_predictor.txt
 
 # Output names used to label the results for each configuration
 names:
-  - as_733_original_predictors
-  - as_caida_original_predictors
-  - oregon_original_predictors
+  - original_predictors_as_733
+  - original_predictors_as_caida
+  - original_predictors_oregon

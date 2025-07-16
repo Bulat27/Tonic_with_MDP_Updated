@@ -17,9 +17,9 @@ dataset_folders:
 # Important: For exec_md_updated.py and exec_md_increased_budget.py, it should be the MinDegreePredictor with \bar{n}_{1} nodes.
 # For exec_md_increased_size.py and exec_md_half_half.py, it should be the MinDegreePredictor containing all node-degree pairs for the first snapshot.
 oracle_min_degree_paths:
-  - /path/to/oracles/as_733/first_snapshot_node_md.txt
-  - /path/to/oracles/as_caida/first_snapshot_node_md.txt
-  - /path/to/oracles/oregon/first_snapshot_node_md.txt
+  - /path/to/oracles/as_733/first_snapshot_min_degree_predictor.txt
+  - /path/to/oracles/as_caida/first_snapshot_min_degree_predictor.txt
+  - /path/to/oracles/oregon/first_snapshot_min_degree_predictor.txt
 
 # Paths to .txt files containing one oracle size (\bar{n}_{i}) per row
 nbar_files:
@@ -29,6 +29,6 @@ nbar_files:
 
 # Base names used to label the output results for each configuration. Make sure to change the name every time you run the script with different parameters.
 base_names:
-  - tonic_with_uss_as_733
-  - tonic_with_uss_as_caida
-  - tonic_with_uss_oregon
+  - md_updated_as_733
+  - md_updated_as_caida
+  - md_updated_oregon

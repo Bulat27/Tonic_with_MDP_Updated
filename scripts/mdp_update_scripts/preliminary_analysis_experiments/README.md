@@ -23,13 +23,11 @@ Preliminary experiments include *MinDegreePredictor* similarity (*Section 5.3.1*
    <br><br>
    where *dataset_folder* is the path to the folder containing preprocessed snapshot files, *oracle_min_degree_folder* is the folder containing the *MinDegreePredictor* files with `\bar{n}_{i}` node-degree pairs for snapshot *i*, *multiplier* is an integer that determines the *USS* capacity per snapshot (parameter *c* in the paper), *n_trials* is the number of independent trials to run per snapshot, and *name* is the base name under which the output results will be stored.
 
-   *Note*: In the output folder, detailed results for each trial are stored. A summary of the results is provided in */path/to/results_folder/uss_full_results.csv*.
-
 ---
 
 # Meta scripts
 
-Meta scripts parameters are managed by the corresponding configuration (.yaml) files as explained in `../README.md`. Each configuration file provides an example setup with parameter descriptions. To run the meta scripts, example configurations need to be replaced with real parameter values, based on your project structure. For example, *oracle_min_degree_folders* parameter contains the entry '/path/to/oracles/as_733/node_oracles', which should be replaced with the path where the *MinDegreePredictor* oracles for the *AS-733* dataset were saved in your project. A similar procedure should be followed for all other parameters.
+Meta scripts parameters are managed by the corresponding configuration (.yaml) files as explained in `../README.md`. Each configuration file provides an example setup with parameter descriptions. To run the meta scripts, example configurations need to be replaced with real parameter values, based on your project structure. For example, *oracle_min_degree_folders* parameter contains the entry '/path/to/oracles/as_733/min_degree_predictor_folder', which should be replaced with the path where the *MinDegreePredictor* oracles for the *AS-733* dataset were saved in your project. A similar procedure should be followed for all other parameters.
 
 1. *MinDegreePredictor* similarity meta script parameters are managed by the `./config/md-similarity.yaml` configuration file. Running the script once (with the parameters based on your project structure) reproduces all the experiments for one method. To reproduce experiments for both methods, run the script once per method (managed by the *script_name* parameter in the configuration file). Since all the parameters are managed by the configuration file, the script should be run as follows:
    <br><br>
@@ -40,6 +38,4 @@ Meta scripts parameters are managed by the corresponding configuration (.yaml) f
    <br><br>
    `python meta_script_uss.py`
    <br><br>
-   
-   *Note*: In the output folder, detailed results for each trial are stored. A summary of the results is provided in */path/to/results_folder/uss_full_results.csv*.
 

@@ -7,11 +7,12 @@ def parse_args():
     The truncated files represent MinDegreePredictors for each snapshot.
 
     Returns:
-        argparse.Namespace: Parsed arguments including oracle input folder, nbar file, and output folder.
+        argparse.Namespace: Parsed arguments including oracle input folder, nbar file, prefix, and output folder.
     """
     parser = argparse.ArgumentParser(description="Truncate precomputed node oracles with all node-degree pairs, based on provided nbar values")
-    parser.add_argument('-i', '--input_folder', required=True, help='Folder containing precomputed node oracles with all node-degree pairs')
+    parser.add_argument('-i', '--oracle_min_degree_folder', required=True, help='Folder containing MinDegreePredictor files with all node-degree pairs')
     parser.add_argument('-b', '--nbar_file', required=True, help='Path to .txt file with one nbar value per snapshot')
+    parser.add_argument('-x', '--prefix', required=True, help='Prefix for naming the truncated oracle files')
     parser.add_argument('-o', '--output_folder', required=True, help='Folder to save truncated oracle files')
     return parser.parse_args()
 
@@ -19,7 +20,7 @@ def main():
     args = parse_args()
     os.makedirs(args.output_folder, exist_ok=True)
 
-    oracle_files = sorted([f for f in os.listdir(args.input_folder) if os.path.isfile(os.path.join(args.input_folder, f))])
+    oracle_files = sorted([f for f in os.listdir(args.oracle_min_degree_folder) if os.path.isfile(os.path.join(args.oracle_min_degree_folder, f))])
 
     with open(args.nbar_file, "r") as f:
         nbar_values = [int(line.strip()) for line in f if line.strip()]
@@ -29,8 +30,15 @@ def main():
                          f"and number of nbar values ({len(nbar_values)}).")
 
     for oracle_filename, nbar in zip(oracle_files, nbar_values):
-        oracle_path = os.path.join(args.input_folder, oracle_filename)
-        output_path = os.path.join(args.output_folder, oracle_filename)
+        oracle_path = os.path.join(args.oracle_min_degree_folder, oracle_filename)
+
+        # Remove the file extension and extract original name (after last underscore)
+        base_name = os.path.splitext(oracle_filename)[0]
+        original_part = base_name.split('_')[-1]
+
+        # Add the new prefix
+        new_filename = f"{args.prefix}_{original_part}.txt"
+        output_path = os.path.join(args.output_folder, new_filename)
 
         with open(oracle_path, 'r') as f:
             lines = f.readlines()

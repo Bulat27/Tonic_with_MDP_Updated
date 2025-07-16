@@ -1,9 +1,5 @@
 import os
 
-def write_metric_to_file(filepath, snapshot_idx, value):
-    with open(filepath, "a") as f:
-        f.write(f"{snapshot_idx} {value:.6f}\n")
-
 def load_node_frequencies_txt(filename):
     """
     Loads node frequency data from a .txt file.

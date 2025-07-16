@@ -28,16 +28,13 @@ def main():
     for dataset_filename in dataset_files:
         dataset_path = os.path.join(args.dataset_folder, dataset_filename)
 
-        # "preprocessed" will be the prefix if exec_preprocess_snapshot_datasets.py was used to preprocess the raw snapshot files
-        if dataset_filename.startswith("preprocessed_"):
-            suffix = dataset_filename[len("preprocessed_"):]
-        else:
-            suffix = dataset_filename
+        # Remove the file extension and extract original name (after last underscore)
+        base_name = os.path.splitext(dataset_filename)[0]
+        original_part = base_name.split('_')[-1]
 
-        # Ensure the prefix ends with an underscore
-        prefix = args.prefix if args.prefix.endswith('_') else args.prefix + '_'
-        oracle_name = prefix + suffix
-
+        # Add the new prefix
+        oracle_name = f"{args.prefix}_{original_part}"
+        
         output_path = os.path.join(args.output_folder, oracle_name)
 
         print(f"\nRunning BuildOracle on: {dataset_filename}")

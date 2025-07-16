@@ -7,13 +7,13 @@ c_values: [1, 2, 3, 4]
 # List of dataset folders, each containing preprocessed graph snapshots
 dataset_folders:
   - /path/to/datasets/as_733                
-  - /path/to/datasets/as_caida_122
+  - /path/to/datasets/as_caida
   - /path/to/datasets/oregon
 
 # List of folders containing the MinDegreePredictor oracle files for each snapshot
 oracle_min_degree_folders:
   - /path/to/oracles/as_733/min_degree_predictor_folder        
-  - /path/to/oracles/as_caida_122/min_degree_predictor_folder
+  - /path/to/oracles/as_caida/min_degree_predictor_folder
   - /path/to/oracles/oregon/min_degree_predictor_folder
 
 # Base names used to label output results for each dataset and parameter combination

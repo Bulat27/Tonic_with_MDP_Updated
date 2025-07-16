@@ -49,7 +49,6 @@ In the following, we describe how to use the scripts required to prepare the cod
    where *input_folder* is the path to the folder containing raw snapshot files to be preprocessed, *output_folder* is the destination folder where the preprocessed snapshot files will be stored (with the hardcoded prefix 'preprocessed_'), *delimiter* is the character used to separate the rows in each snapshot file, and *skip* is the number of lines to skip before starting to read each snapshot file.
 
    *Note*: To pass a **tab character** as the delimiter, use `$'\t'` in the command line (e.g., `-d $'\t'`). To pass a **space character**, enclose it in quotes (e.g., `-d ' '`).
-
    <br><br>
 
 3. Build the oracle for all snapshots in a sequence 
@@ -72,7 +71,7 @@ In the following, we describe how to use the scripts required to prepare the cod
 
 5. Truncate the node-degree pair files for each snapshot to the true *MinDegreePredictorSize*:
    <br><br>
-   `python exec_construct_mdp_from_node_degrees_snapshots.py -i <oracle_min_degree_folder> -b <nbar_file> -x <prefix> -o <output_folder>`
+   `python exec_truncate_mdp_snapshots.py -i <oracle_min_degree_folder> -b <nbar_file> -x <prefix> -o <output_folder>`
    <br><br>
    where *oracle_min_degree_folder* is the path to the folder with files containing *MinDegreePredictor* files with all node-degree pairs for each snapshot at point (3), *nbar_file* is the path to .txt file with one `\bar{n}_{i}` value per snapshot at point (4), *prefix* is the prefix for each oracle file name (read the note in point (3) for details), and *output_folder* is the destination folder where the *MinDegreePredictor* oracles with `\bar{n}_{i}` entries for snapshot *i* will be stored.
    <br><br>

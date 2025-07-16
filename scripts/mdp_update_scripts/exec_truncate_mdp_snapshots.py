@@ -37,8 +37,8 @@ def main():
         original_part = base_name.split('_')[-1]
 
         # Add the new prefix
-        new_filename = f"{args.prefix}_{original_part}.txt"
-        output_path = os.path.join(args.output_folder, new_filename)
+        oracle_name = f"{args.prefix}_{original_part}.txt"
+        output_path = os.path.join(args.output_folder, oracle_name)
 
         with open(oracle_path, 'r') as f:
             lines = f.readlines()

@@ -33,9 +33,8 @@ def main():
         original_part = base_name.split('_')[-1]
 
         # Add the new prefix
-        oracle_name = f"{args.prefix}_{original_part}"
-        
-        output_path = os.path.join(args.output_folder, oracle_name)
+        new_oracle_name = f"{args.prefix}_{original_part}.txt"
+        output_path = os.path.join(args.output_folder, new_oracle_name)
 
         print(f"\nRunning BuildOracle on: {dataset_filename}")
 
@@ -47,7 +46,7 @@ def main():
             output_path
         ], check=True)
 
-        print(f"Oracle written to: {oracle_name}")
+        print(f"Oracle written to: {new_oracle_name}")
 
 if __name__ == "__main__":
     main()

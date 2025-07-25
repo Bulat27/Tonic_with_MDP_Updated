@@ -14,7 +14,7 @@ The experiments are split in two parts:
 
 In this file, we explain the general structure of the experiments as well as the common steps required for both the preliminary analysis and the final results. Additional steps required to reproduce the results are explained in the corresponding subfolders. Scripts to reproduce the preliminary analysis can be found in the `./preliminary_analysis_experiments` subfolder, while the scripts for the final experiments are located in `./tonic_with_uss_experiments` Both folders contain two types of scripts:
 
-1. Single-run scripts, which reproduce the result of a single experiment configuration — corresponding to one curve in a plot or one entry in a table (i.e., a specific method with a single setting of parameters).
+1. Single-run scripts, which reproduce the result of a single experiment configuration — corresponding to one curve in a plot or one entry in a table (i.e., a specific method with a single setting of parameters). Running the single-run script automatically saves the .csv file with the results in the output folder, based on the *name* parameter.
 
 2. Meta scripts, which automate the reproduction of all configurations required to generate an entire figure or table. These scripts internally call the single-run scripts for each setting.
 
@@ -28,7 +28,7 @@ In the following, we describe how to use the scripts required to prepare the cod
 
 ## Installation
 
-   Please run the following command in `root/scripts/mdp_update_scripts` folder (the folder where this README.md is located) to install the required Python packages:
+   To install the dependencies, Python `>= 3.8` version is required. Please run the following command in `root/scripts/mdp_update_scripts` folder (the folder where this README.md is located) to install the required Python packages:
    <br><br>
    `pip install -r requirements.txt`
    <br><br>

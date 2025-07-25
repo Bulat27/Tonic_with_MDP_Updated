@@ -14,7 +14,7 @@ Preliminary experiments include *MinDegreePredictor* similarity (*Section 5.3.1*
    <br><br>
    `python <script_name>.py -o <oracle_min_degree_folder> -n <name>`
    <br><br>
-   where *script_name* is the name of the script to be run (*exec_first_snapshot_mdp_similarity_experiments.py* or *exec_previous_snapshot_mdp_similarity_experiments.py*), *oracle_min_degree_folder* is the folder containing the *MinDegreePredictor* files with `\bar{n}_{i}` node-degree pairs for snapshot *i*, and *name* is the base name for the output results.
+   where *script_name* is the name of the script to be run (*exec_first_snapshot_mdp_similarity_experiments* or *exec_previous_snapshot_mdp_similarity_experiments*), *oracle_min_degree_folder* is the folder containing the *MinDegreePredictor* files with `\bar{n}_{i}` node-degree pairs for snapshot *i*, and *name* is the base name for the output results.
    <br><br>
 
 2. *USS* experiments script should be run as follows:

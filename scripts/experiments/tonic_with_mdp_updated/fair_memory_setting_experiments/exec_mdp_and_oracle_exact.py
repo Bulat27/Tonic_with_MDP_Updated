@@ -6,7 +6,7 @@ from utils import run_exact_algorithm
 def parse_args():
     """
     Parses command-line arguments for running TONIC on graph snapshots
-    using OracleExact and the original MinDegreePredictor (MDOriginal in the paper).
+    using OracleExact and the original MinDegreePredictor.
 
     Returns:
         argparse.Namespace: Parsed command-line arguments with dataset path,
@@ -32,8 +32,8 @@ def main():
     """
     args = parse_args()
 
-    FILE_TONIC = "../code/Tonic-build/Tonic"
-    FILE_EXACT = "../code/Tonic-build/RunExactAlgo"
+    FILE_TONIC = "../../../code/Tonic-build/Tonic"
+    FILE_EXACT = "../../../code/Tonic-build/RunExactAlgo"
 
     RANDOM_SEED = 4177
     END = RANDOM_SEED + args.n_trials - 1
@@ -70,7 +70,7 @@ def main():
                 dataset_path, args.oracle_exact_path, "edges", OUTPUT_PATH_TONIC + "_exact"
             ], check=True)
 
-            # Run TONIC with MinDegreePredictor (MDOriginal)
+            # Run TONIC with MinDegreePredictor
             subprocess.run([
                 FILE_TONIC, "0", str(r), str(memory_budget), "0.05", "0.2",
                 dataset_path, args.oracle_min_degree_path, "nodes", OUTPUT_PATH_TONIC + "_min_degree"

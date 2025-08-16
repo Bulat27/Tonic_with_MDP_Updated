@@ -10,7 +10,7 @@ def launch_independent_runs(script_name, c_values, dataset_folders, oracle_min_p
     launched once for each combination of (dataset, oracle, nbar, base_name) and c value.
 
     Args:
-        script_name (str): Path to the Python script to be executed (e.g., 'exec_md_updated.py')
+        script_name (str): Path to the Python script to be executed (e.g., 'exec_mdp_updated.py')
         c_values (list[int]): List of `c` values (multiplier for oracle size)
         dataset_folders (list[str]): List of dataset folders (each containing graph snapshots)
         oracle_min_paths (list[str]): List of paths to (initial) MinDegreePredictor oracles
@@ -56,7 +56,7 @@ def launch_independent_runs(script_name, c_values, dataset_folders, oracle_min_p
 
 if __name__ == "__main__":
     # Load from YAML
-    with open("config/md-updated-fair-experiments.yaml", "r") as f:
+    with open("config/mdp-updated-fair-experiments.yaml", "r") as f:
         config = yaml.safe_load(f)
 
     script_name = config["script_name"]

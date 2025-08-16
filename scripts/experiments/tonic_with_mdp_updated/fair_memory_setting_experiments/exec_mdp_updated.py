@@ -7,7 +7,7 @@ import shutil
 
 def parse_args():
     """
-    Parses command-line arguments for running TONIC with USS to update the MinDegreePredictor (MDUpdated in the paper).
+    Parses command-line arguments for running TONIC with USS to update the MinDegreePredictor (MinDegreePredictr Updated in the paper).
 
     Returns:
         argparse.Namespace: Parsed arguments with dataset path, oracle path, and experiment parameters.
@@ -73,7 +73,7 @@ def update_node_oracle(updated_oracle_path, node_degree_file):
 
 def main():
     """
-    Main function to run TONIC with USS (MDUpdated predictor) on a sequence of graph snapshots.
+    Main function to run TONIC with USS (MinDegreePredictor Updated) on a sequence of graph snapshots.
 
     For each snapshot:
     - It runs the exact triangle counting algorithm to determine the total number of edges
@@ -85,8 +85,8 @@ def main():
     """
     args = parse_args()
 
-    FILE_TONIC = "../code/Tonic-build/Tonic"
-    FILE_EXACT = "../code/Tonic-build/RunExactAlgo"
+    FILE_TONIC = "../../../code/Tonic-build/Tonic"
+    FILE_EXACT = "../../../code/Tonic-build/RunExactAlgo"
 
     RANDOM_SEED = 4177
     END = RANDOM_SEED + args.n_trials - 1

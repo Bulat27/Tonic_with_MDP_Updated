@@ -8,7 +8,7 @@ def parse_args():
     """
     Parses command-line arguments for running TONIC with partial split of additional entries:
     half of the additional entries go to the memory budget, and half to the 
-    MinDegreePredictor size (MDHalfHalf in the paper).
+    MinDegreePredictor size (MinDegreePredictor Split in the paper).
 
     Returns:
         argparse.Namespace: Parsed arguments including dataset folder, oracle path,
@@ -38,8 +38,8 @@ def main():
     """
     args = parse_args()
 
-    FILE_TONIC = "../code/Tonic-build/Tonic"
-    FILE_EXACT = "../code/Tonic-build/RunExactAlgo"
+    FILE_TONIC = "../../../code/Tonic-build/Tonic"
+    FILE_EXACT = "../../../code/Tonic-build/RunExactAlgo"
 
     RANDOM_SEED = 4177
     END = RANDOM_SEED + args.n_trials - 1

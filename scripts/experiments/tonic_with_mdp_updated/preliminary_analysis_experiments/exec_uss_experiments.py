@@ -41,7 +41,7 @@ def main():
     """
     args = parse_args()
 
-    FILE_USS = "../code/Tonic-build/RunUSS"
+    FILE_USS = "../../../code/Tonic-build/RunUSS"
     OUTPUT_ROOT = f"output/USSExperiments/{args.name}"
     os.makedirs(OUTPUT_ROOT, exist_ok=True)
 

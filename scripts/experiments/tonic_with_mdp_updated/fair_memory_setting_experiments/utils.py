@@ -38,7 +38,7 @@ def read_top_k_lines(file_path, k):
 def clean_auxiliary_files(output_folder):
     """
     Removes all auxiliary files containing 'seed' in their filenames from a folder.
-    This is used to delete the auxiliary files produced during the MDUpdated (Tonic with USS) execution.
+    This is used to delete the auxiliary files produced during the Tonic with MDP Updated execution.
 
     Args:
         output_folder (str): Path to the folder where auxiliary files should be removed

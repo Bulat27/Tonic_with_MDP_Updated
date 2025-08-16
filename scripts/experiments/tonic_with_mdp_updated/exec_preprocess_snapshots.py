@@ -20,7 +20,7 @@ def parse_args():
 def main():
     args = parse_args()
 
-    FILE_PREPROCESSING = "./code/Tonic-build/DataPreprocessing"
+    FILE_PREPROCESSING = "../../code/Tonic-build/DataPreprocessing"
     os.makedirs(args.output_folder, exist_ok=True)
 
     input_files = sorted([f for f in os.listdir(args.input_folder) if os.path.isfile(os.path.join(args.input_folder, f))])

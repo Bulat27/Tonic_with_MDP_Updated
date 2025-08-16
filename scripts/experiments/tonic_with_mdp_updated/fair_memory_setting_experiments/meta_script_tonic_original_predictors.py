@@ -4,13 +4,13 @@ import yaml
 
 def launch_independent_runs(script_path, dataset_folders, oracle_exact_paths, oracle_min_paths, names, n_trials):
     """
-    Launches multiple independent runs of the "exec_md_original_exact_original_tonic.py" script using subprocesses.
+    Launches multiple independent runs of the "exec_mdp_and_oracle_exact.py" script using subprocesses.
 
     Each run is configured with a specific dataset folder, oracle paths, and name.
     Ensures the number of datasets, oracles, and names are aligned.
 
     Args:
-        script_path (str): Path to the script to be executed (exec_md_original_exact_original_tonic.py)
+        script_path (str): Path to the script to be executed (exec_mdp_and_oracle_exact.py)
         dataset_folders (list[str]): List of dataset folders containing graph snapshots, one per experiment
         oracle_exact_paths (list[str]): List of paths to exact oracles, one per experiment
         oracle_min_paths (list[str]): List of paths to MinDegreePredictor oracles, one per experiment
@@ -59,6 +59,6 @@ if __name__ == "__main__":
     names = config["names"]
     n_trials = config["n_trials"]
 
-    script_path = "exec_md_and_exact_original.py"
+    script_path = "exec_mdp_and_oracle_exact.py"
 
     launch_independent_runs(script_path, dataset_folders, oracle_exact_paths, oracle_min_paths, names, n_trials)

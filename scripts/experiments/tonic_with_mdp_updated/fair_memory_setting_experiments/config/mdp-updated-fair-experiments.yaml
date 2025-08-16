@@ -1,5 +1,5 @@
-# Name of the script to run (exec_md_updated.py, exec_md_increased_size.py, exec_md_increased_budget.py, or exec_md_half_half.py)
-script_name: "exec_md_updated.py"
+# Name of the script to run (exec_mdp_updated.py, exec_mdp_increased_budget.py, exec_mdp_increased_size.py, , or exec_mdp_split.py)
+script_name: "exec_mdp_updated.py"
 
 # Number of independent trials to run per snapshot
 n_trials: 50
@@ -14,8 +14,8 @@ dataset_folders:
   - /path/to/datasets/oregon
 
 # Paths to the MinDegreePredictor file from the first snapshot of each dataset
-# Important: For exec_md_updated.py and exec_md_increased_budget.py, it should be the MinDegreePredictor with \bar{n}_{1} nodes.
-# For exec_md_increased_size.py and exec_md_half_half.py, it should be the MinDegreePredictor containing all node-degree pairs for the first snapshot.
+# Important: For exec_mdp_updated.py and exec_mdp_increased_budget.py, it should be the MinDegreePredictor with \bar{n}_{1} nodes.
+# For exec_mdp_increased_size.py and exec_mdp_split.py, it should be the MinDegreePredictor containing all node-degree pairs for the first snapshot.
 oracle_min_degree_paths:
   - /path/to/oracles/as_733/first_snapshot_min_degree_predictor.txt
   - /path/to/oracles/as_caida/first_snapshot_min_degree_predictor.txt
@@ -29,6 +29,6 @@ nbar_files:
 
 # Base names used to label the output results for each configuration. Make sure to change the name every time you run the script with different parameters.
 base_names:
-  - md_updated_as_733
-  - md_updated_as_caida
-  - md_updated_oregon
+  - mdp_updated_as_733
+  - mdp_updated_as_caida
+  - mdp_updated_oregon

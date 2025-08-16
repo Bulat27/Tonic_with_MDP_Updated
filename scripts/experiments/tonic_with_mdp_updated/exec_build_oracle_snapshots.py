@@ -20,7 +20,7 @@ def parse_args():
 def main():
     args = parse_args()
 
-    FILE_BUILD_ORACLE = "./code/Tonic-build/BuildOracle"
+    FILE_BUILD_ORACLE = "../../code/Tonic-build/BuildOracle"
     os.makedirs(args.output_folder, exist_ok=True)
 
     dataset_files = sorted([f for f in os.listdir(args.dataset_folder) if os.path.isfile(os.path.join(args.dataset_folder, f))])

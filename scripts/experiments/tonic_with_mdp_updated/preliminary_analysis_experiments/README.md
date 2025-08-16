@@ -1,10 +1,10 @@
-# Instructions to reproduce the preliminary experiments for Tonic with MDUpdated predictor (Sections 5.3.1 and 5.3.2 in the paper)
+# Instructions to reproduce the preliminary experiments for Tonic with MinDegreePredictor Updated (Sections B.8.1 in and B.8.2 in Appendix)
 
 ---
 
 Here are the instructions to reproduce the preliminary experiments for *Tonic* combined with *Unbiased Space Saving (USS)* to update the *MinDegreePredictor* for sequences of graph streams. Please make sure to read the instructions in `../README.md` before continuing. Following the previous instructions ensures that the code and data are ready for running the scripts in this folder.
 
-Preliminary experiments include *MinDegreePredictor* similarity (*Section 5.3.1*, *Figure 5*) and *USS* (*Section 5.3.2*, *Figure 6*) experiments. We provide the scripts to reproduce each method (including the parameter setting) shown in the figures separately, as well as meta scripts to reproduce all the results. All scripts should be run from the `root/scripts/mdp_update_scripts/preliminary_analysis_experiments` folder (the folder where this README.md is located), where root refers to the root directory of the GitHub repository. If you do not want the instructions to run each method separately, please skip to [Meta scripts](#meta-scripts) for a simple procedure to reproduce all the results from the preliminary analysis.
+Preliminary experiments include *MinDegreePredictor* similarity (*Section B.8.1 in Appendix*, *Figure B7*) and *USS* (*Section B.8.2 in Appendix*, *Figure B8*) experiments. We provide the scripts to reproduce each method (including the parameter setting) shown in the figures separately, as well as meta scripts to reproduce all the results. All scripts should be run from the `root/scripts/experiments/tonic_with_mdp_updated/preliminary_analysis_experiments` folder (the folder where this README.md is located), where root refers to the root directory of the GitHub repository. If you do not want the instructions to run each method separately, please skip to [Meta scripts](#meta-scripts) for a simple procedure to reproduce all the results from the preliminary analysis.
 
 ---
 
@@ -29,9 +29,9 @@ Preliminary experiments include *MinDegreePredictor* similarity (*Section 5.3.1*
 
 Meta scripts parameters are managed by the corresponding configuration (.yaml) files as explained in `../README.md`. Each configuration file provides an example setup with parameter descriptions. To run the meta scripts, example configurations need to be replaced with real parameter values, based on your project structure. For example, *oracle_min_degree_folders* parameter contains the entry '/path/to/oracles/as_733/min_degree_predictor_folder', which should be replaced with the path where the *MinDegreePredictor* oracles for the *AS-733* dataset were saved in your project. A similar procedure should be followed for all other parameters.
 
-1. *MinDegreePredictor* similarity meta script parameters are managed by the `./config/md-similarity.yaml` configuration file. Running the script once (with the parameters based on your project structure) reproduces all the experiments for one method. To reproduce experiments for both methods, run the script once per method (managed by the *script_name* parameter in the configuration file). Since all the parameters are managed by the configuration file, the script should be run as follows:
+1. *MinDegreePredictor* similarity meta script parameters are managed by the `./config/mdp-similarity.yaml` configuration file. Running the script once (with the parameters based on your project structure) reproduces all the experiments for one method. To reproduce experiments for both methods, run the script once per method (managed by the *script_name* parameter in the configuration file). Since all the parameters are managed by the configuration file, the script should be run as follows:
    <br><br>
-   `python meta_script_md_similarity.py`
+   `python meta_script_mdp_similarity.py`
    <br><br>
    
 2. *USS* experiments are managed by the `./config/uss-experiments.yaml `configuration file. To reproduce all the results, replace the configuration examples in the .yaml file with real parameter values (based on your project structure) and run the script as follows:

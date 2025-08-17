@@ -4,7 +4,7 @@
 
 Here are the instructions to reproduce the main experiments for *Tonic* combined with *Unbiased Space Saving (USS)* to update the *MinDegreePredictor* for sequences of graph streams. Please make sure to read the instructions in `../README.md` before continuing. Following the previous instructions ensures that the code and data are ready for running the scripts in this folder.
 
-Main results for *Tonic* with *MinDegreePredictor (MDP) Updated* are reported in *Table 2* in the paper. We provide the scripts to reproduce each entry in the table separately as well as meta scripts to easily reproduce the whole table. All scripts should be run from the `root/scripts/experiments/tonic_with_mdp_updated/fair_memory_settings_experiments` folder (the folder where this README.md is located), where root refers to the root directory of the GitHub repository. If you do not want the instructions to run each method separately, please skip to [Meta scripts](#meta-scripts) for a simple procedure to reproduce all the results contained in *Table 2*.
+Main results for *Tonic* with *MinDegreePredictor (MDP) Updated* are reported in *Table 2* in the paper. We provide the scripts to reproduce each entry in the table separately as well as meta scripts to easily reproduce the whole table. All scripts should be run from the `root/scripts/experiments/tonic_with_mdp_updated/fair_memory_setting_experiments` folder (the folder where this README.md is located), where root refers to the root directory of the GitHub repository. If you do not want the instructions to run each method separately, please skip to [Meta scripts](#meta-scripts) for a simple procedure to reproduce all the results contained in *Table 2*.
 
 ---
 
